@@ -138,6 +138,10 @@ pointer-events: none;
 .hud-corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
 .hud-corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
 
+@media (max-width: 768px) {
+.hud-corner { display: none; }
+}
+
 /* ===== HEADER ===== */
 .topbar {
 position: relative;
@@ -910,17 +914,72 @@ gap: 12px;
 .legend { display: none; }
 }
 @media (max-width: 768px) {
-.controls { padding: 10px 14px; }
-.topbar { padding: 12px 14px; }
-.side-panel { width: 100vw; }
+.controls {
+padding: 8px 12px;
+gap: 8px;
+flex-wrap: wrap;
+overflow-x: auto;
+-webkit-overflow-scrolling: touch;
+}
+.controls::-webkit-scrollbar { height: 0; }
+
+```
+.control-label {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  margin-right: 2px;
+}
+
+.segment {
+  padding: 2px;
+  flex-shrink: 0;
+}
+.segment button {
+  padding: 5px 8px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.search {
+  flex: 1 1 100%;
+  max-width: 100%;
+  order: 99;
+}
+.search input {
+  padding: 7px 10px 7px 30px;
+  font-size: 12px;
+}
+
+.topbar { padding: 10px 12px; gap: 10px; }
+.brand-mark { width: 32px; height: 32px; font-size: 18px; }
+.brand-title { font-size: 16px; letter-spacing: 0.04em; }
 .brand-sub { display: none; }
+
+.topbar-right { gap: 8px; }
+.view-toggle button {
+  padding: 5px 8px;
+  font-size: 10px;
+  gap: 4px;
+}
+.currency-toggle button {
+  padding: 5px 10px;
+  font-size: 12px;
+  min-width: 32px;
+}
+
+.side-panel { width: 100vw; }
+
 .list-header, .list-row {
-grid-template-columns: 32px minmax(110px, 1fr) 80px 70px 90px;
-gap: 10px;
-padding: 10px 14px;
+  grid-template-columns: 32px minmax(110px, 1fr) 80px 70px 90px;
+  gap: 10px;
+  padding: 10px 14px;
 }
 .col-1h, .col-7d, .col-vol, .col-spark { display: none; }
-.view-toggle button { padding: 6px 8px; }
+
+.canvas-wrap { height: calc(100vh - 100px); }
+.list-view { height: calc(100vh - 100px); }
+```
+
 }
 </style>
 
@@ -1473,17 +1532,23 @@ function render() {
     const restVolume = d3.sum(rest, d => d.volume);
     const avgChange = rest.reduce((acc, d) => acc + (d[ck] || 0), 0) / rest.length;
 
+    // Capar el peso visual de Others: máximo 25% del área total del top N.
+    // Esto evita que con Top 10 el tile "Others +118" domine toda la pantalla.
+    const topMcapSum = d3.sum(top, d => d.marketCap);
+    const cappedMcap = Math.min(restMcap, topMcapSum * 0.33);
+
     othersData = {
       _isOthers: true,
       id: 'others',
       symbol: 'OTHERS',
       name: `Subnets ${TOP_N + 1}–${sorted.length}`,
       owner: '—',
-      marketCap: restMcap,
+      marketCap: cappedMcap,        // valor capado para el treemap
+      _realMarketCap: restMcap,     // valor real para mostrar en tooltip
       volume: restVolume,
       price: 0,
       change1h: 0, change24h: 0, change7d: 0, change30d: 0,
-      [ck]: avgChange,  // valor del cambio promedio para el rango activo
+      [ck]: avgChange,
       _restItems: rest,
       _restCount: rest.length,
       color: colorForChange(avgChange),
@@ -1558,8 +1623,8 @@ function render() {
 
     // Caso especial: tile "Others"
     if (d.data._isOthers) {
-      const symSize = Math.max(10, Math.min(minSide * 0.18, 22));
-      const countSize = Math.max(8, Math.min(minSide * 0.32, 38));
+      const symSize = Math.max(10, Math.min(minSide * 0.16, 22));
+      const countSize = Math.max(8, Math.min(minSide * 0.28, 38));
       const valSize = Math.max(8, Math.min(minSide * 0.10, 12));
 
       g.select('.tile-symbol')
@@ -1568,9 +1633,9 @@ function render() {
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .attr('font-size', symSize)
-        .attr('fill', 'rgba(0, 240, 255, 0.7)')
+        .attr('fill', 'rgba(0, 240, 255, 0.95)')
         .attr('fill-opacity', 1)
-        .attr('letter-spacing', '0.08em')
+        .attr('letter-spacing', '0.12em')
         .text('OTHERS');
 
       g.select('.tile-value')
@@ -1579,8 +1644,9 @@ function render() {
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .attr('font-size', countSize)
-        .attr('fill', '#f4faff')
+        .attr('fill', '#00f0ff')
         .attr('fill-opacity', 1)
+        .style('text-shadow', '0 0 14px rgba(0, 240, 255, 0.7)')
         .text(`+${d.data._restCount}`);
 
       g.select('.tile-id')
@@ -1588,9 +1654,9 @@ function render() {
         .attr('y', cy + countSize * 0.95)
         .attr('text-anchor', 'middle')
         .attr('font-size', valSize)
-        .attr('fill', 'rgba(255, 255, 255, 0.45)')
+        .attr('fill', 'rgba(0, 240, 255, 0.7)')
         .attr('fill-opacity', minSide > 80 ? 1 : 0)
-        .text(minSide > 80 ? `↗ ver lista` : '');
+        .text(minSide > 80 ? `→ TAP TO EXPAND` : '');
 
       g.select('.tile-extra')
         .attr('fill-opacity', 0)
@@ -1822,7 +1888,8 @@ function onHoverOthers(event, d) {
   const chEl = document.getElementById('tt-change');
   chEl.textContent = fmtPct(d[ck]) + ' avg';
   chEl.style.color = d[ck] >= 0 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('tt-mcap').textContent = fmtMoney(d.marketCap);
+  // Mostrar el market cap REAL agregado, no el capado para visualización
+  document.getElementById('tt-mcap').textContent = fmtMoney(d._realMarketCap || d.marketCap);
   document.getElementById('tt-vol').textContent = fmtMoney(d.volume);
   onMove(event);
 }
@@ -1858,7 +1925,7 @@ function openOthersPanel(d) {
     </div>
 
     <div class="panel-price-row">
-      <div class="panel-price">${fmtMoney(d.marketCap)}</div>
+      <div class="panel-price">${fmtMoney(d._realMarketCap || d.marketCap)}</div>
       <div class="panel-change ${d[ck] >= 0 ? 'pos' : 'neg'}">${fmtPct(d[ck])} avg · ${STATE.timeframe.toUpperCase()}</div>
     </div>
 
@@ -2309,9 +2376,20 @@ function mapTaostatsSubnet(raw) {
     ? raw.name
     : (def ? def.name : `Subnet ${netuid}`);
 
-  let symbol = (raw.symbol && raw.symbol.trim())
-    ? raw.symbol.trim()
-    : (def ? def.symbol : `SN${netuid}`);
+  // PRIORIZAMOS nuestro SUBNET_DEFS para los símbolos (tickers cortos en mayúsculas
+  // como APEX, OMRON, CHUTES). Taostats devuelve glifos unicode raros (ش, ת, etc.)
+  // que provienen del bittensor_id del JSON oficial pero no son legibles.
+  // Solo caemos al símbolo de Taostats si nuestro def lo trata como genérico (SN{N}).
+  let symbol;
+  if (def && def.symbol && !def.symbol.startsWith('SN')) {
+    symbol = def.symbol;  // tenemos un ticker bonito → úsalo
+  } else if (raw.symbol && raw.symbol.trim() && /^[A-Z0-9]{2,}$/i.test(raw.symbol.trim())) {
+    symbol = raw.symbol.trim().toUpperCase();  // Taostats da algo legible
+  } else if (def) {
+    symbol = def.symbol;  // fallback al SN{N}
+  } else {
+    symbol = `SN${netuid}`;
+  }
 
   const priceInTao = parseFloat(raw.price) || 0;
   const marketCapTao = (parseFloat(raw.market_cap) || 0) / RAO;
