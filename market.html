@@ -926,7 +926,7 @@ gap: 12px;
 }
 @media (max-width: 768px) {
 body {
-overflow-x: hidden;  /* Prevenir scroll horizontal accidental */
+overflow-x: hidden;
 }
 
 ```
@@ -963,7 +963,6 @@ overflow-x: hidden;  /* Prevenir scroll horizontal accidental */
   min-width: 28px;
 }
 
-/* Controles: stack vertical limpio en lugar de wrap caótico */
 .controls {
   padding: 8px 12px;
   gap: 8px 10px;
@@ -988,7 +987,6 @@ overflow-x: hidden;  /* Prevenir scroll horizontal accidental */
   letter-spacing: 0.04em;
 }
 
-/* Search ocupa toda la fila al final */
 .search {
   flex: 1 1 100%;
   max-width: 100%;
@@ -1002,13 +1000,27 @@ overflow-x: hidden;  /* Prevenir scroll horizontal accidental */
 
 .side-panel { width: 100vw; }
 
-/* Lista: ocultar más columnas en móvil para que NO haga scroll horizontal */
+/* Lista en móvil: layout flex limpio. Sustituimos el grid completamente. */
 .list-header, .list-row {
-  grid-template-columns: 28px minmax(0, 1fr) 80px 70px;
-  gap: 8px;
-  padding: 10px 12px;
+  display: flex !important;
+  align-items: center;
+  grid-template-columns: none !important;
+  gap: 10px !important;
+  padding: 10px 12px !important;
 }
-.col-1h, .col-7d, .col-vol, .col-spark { display: none !important; }
+.list-header > div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Ocultar columnas que no caben */
+.col-price, .col-1h, .col-7d, .col-vol, .col-spark { display: none !important; }
+/* Ancho fijo para las columnas visibles */
+.col-rank { flex: 0 0 24px !important; text-align: center; }
+.col-subnet { flex: 1 1 auto !important; min-width: 0 !important; }
+.col-mcap { flex: 0 0 76px !important; text-align: right !important; justify-content: flex-end !important; }
+.col-24h { flex: 0 0 60px !important; text-align: right !important; justify-content: flex-end !important; }
+
 .list-meta { font-size: 10px; }
 .list-symbol { font-size: 14px; }
 .list-val { font-size: 12px; }
@@ -1147,7 +1159,7 @@ overflow-x: hidden;  /* Prevenir scroll horizontal accidental */
     <div class="col-1h num" data-sort="change1h">1H %</div>
     <div class="col-24h num" data-sort="change24h">24H %</div>
     <div class="col-7d num" data-sort="change7d">7D %</div>
-    <div class="col-mcap num sorted" data-sort="marketCap">Market Cap <span class="sort-icon">↓</span></div>
+    <div class="col-mcap num sorted" data-sort="marketCap">MCap <span class="sort-icon">↓</span></div>
     <div class="col-vol num" data-sort="volume">Volume</div>
     <div class="col-spark num">Chart</div>
   </div>
@@ -1643,12 +1655,12 @@ function render() {
   all.select('.tile-rect')
     .attr('width', d => Math.max(0, d.x1 - d.x0))
     .attr('height', d => Math.max(0, d.y1 - d.y0))
-    .attr('fill', d => d.data._isOthers ? 'rgba(0, 240, 255, 0.06)' : d.data.color.fill)
-    .attr('fill-opacity', d => d.data._isOthers ? 1 : 0.45)
-    .attr('stroke', d => d.data._isOthers ? 'rgba(0, 240, 255, 0.6)' : d.data.color.fill)
-    .attr('stroke-opacity', d => d.data._isOthers ? 1 : 1)
-    .attr('stroke-width', d => d.data._isOthers ? 1.2 : 1.5)
-    .attr('stroke-dasharray', d => d.data._isOthers ? '4,3' : null)
+    .attr('fill', d => d.data._isOthers ? '#0a1620' : d.data.color.fill)
+    .attr('fill-opacity', d => d.data._isOthers ? 0.92 : 0.45)
+    .attr('stroke', d => d.data._isOthers ? '#00f0ff' : d.data.color.fill)
+    .attr('stroke-opacity', d => d.data._isOthers ? 0.8 : 1)
+    .attr('stroke-width', d => d.data._isOthers ? 1.5 : 1.5)
+    .attr('stroke-dasharray', d => d.data._isOthers ? '5,4' : null)
     .attr('rx', 4)
     .attr('ry', 4);
 
@@ -1772,13 +1784,15 @@ function render() {
       .text(() => isLarge ? fmtPriceCompact(d.data.price) : '');
 
     g.select('.tile-id')
-      .attr('x', 6)
-      .attr('y', idSize + 4)
+      .attr('x', 8)
+      .attr('y', 14)
       .attr('text-anchor', 'start')
-      .attr('font-size', idSize)
-      .attr('fill', '#fff')
-      .attr('fill-opacity', (isLarge || isMedium) ? 0.5 : 0)
-      .text(() => (isLarge || isMedium) ? `SN${d.data.id}` : '');
+      .attr('font-size', 9)
+      .attr('fill', 'rgba(255, 255, 255, 0.4)')
+      .attr('font-weight', '400')
+      .attr('letter-spacing', '0.05em')
+      .attr('fill-opacity', isLarge ? 1 : 0)
+      .text(() => isLarge ? `SN${d.data.id}` : '');
   });
 
   document.getElementById('subnet-count').textContent = data.length;
