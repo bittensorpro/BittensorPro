@@ -6,2351 +6,701 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Bittensor Pro · Subnet Market</title>
 
-<!-- PWA / iOS Add to Home Screen -->
+<!-- PWA / iOS -->
 
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Bittensor Pro" />
 <meta name="theme-color" content="#05060a" />
-<meta name="mobile-web-app-capable" content="yes" />
 
-<!-- Favicon e icono home screen (SVG inline para no necesitar archivos extra) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' rx='48' fill='%230a0817'/%3E%3Cg transform='translate(128,128)' fill='%23ffffff'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' rx='48' fill='%230a0817'/%3E%3Cg transform='translate(128,128)' fill='%23ffffff'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3C/svg%3E" />
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cdefs%3E%3CradialGradient id='b' cx='50%25' cy='40%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='%232a1147'/%3E%3Cstop offset='60%25' stop-color='%230a0817'/%3E%3Cstop offset='100%25' stop-color='%2303030a'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='256' height='256' rx='48' fill='url(%23b)'/%3E%3Cg transform='translate(128,128)'%3E%3Cg transform='translate(3,0)' opacity='0.55' fill='%23ff2bd6'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3Cg transform='translate(-3,0)' opacity='0.55' fill='%2300f0ff'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" />
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cdefs%3E%3CradialGradient id='b' cx='50%25' cy='40%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='%232a1147'/%3E%3Cstop offset='60%25' stop-color='%230a0817'/%3E%3Cstop offset='100%25' stop-color='%2303030a'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='256' height='256' rx='48' fill='url(%23b)'/%3E%3Cg transform='translate(128,128)'%3E%3Cg transform='translate(3,0)' opacity='0.55' fill='%23ff2bd6'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3Cg transform='translate(-3,0)' opacity='0.55' fill='%2300f0ff'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3Cg fill='%23ffffff'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 
-<!-- Web App Manifest inline -->
-
-<link rel="manifest" href='data:application/manifest+json,{"name":"Bittensor Pro","short_name":"BTT Pro","start_url":"./","display":"standalone","background_color":"%2305060a","theme_color":"%2305060a","orientation":"any"}' />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet" />
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 <style>
   :root {
     --bg: #05060a;
-    --bg-elev: #0d0f17;
-    --bg-elev-2: #141826;
-    --border: rgba(0, 240, 255, 0.08);
-    --border-strong: rgba(0, 240, 255, 0.22);
+    --bg-2: #0d0f17;
+    --border: rgba(0, 240, 255, 0.10);
     --text: #e8f6ff;
     --text-dim: #8a95a8;
-    --text-faint: #4d5566;
+    --text-faint: #5a6273;
     --green: #22d87a;
-    --green-dim: #0f7a42;
     --red: #ff4d5e;
-    --red-dim: #8a1a27;
-    --yellow: #ffbe3d;
-    --neon-cyan: #00f0ff;
-    --neon-magenta: #ff2bd6;
-    --neon-violet: #8a2bff;
-    --accent: var(--neon-cyan);
-    --font-display: 'Orbitron', 'Chakra Petch', sans-serif;
-    --font-ui: 'Chakra Petch', system-ui, sans-serif;
-    --font-mono: 'Share Tech Mono', ui-monospace, monospace;
+    --cyan: #00f0ff;
+    --magenta: #ff2bd6;
   }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html, body {
-background: var(–bg);
-color: var(–text);
-font-family: var(–font-ui);
-height: 100%;
-overflow: hidden;
--webkit-font-smoothing: antialiased;
-}
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Chakra Petch', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
 
-/* iOS PWA safe-area: cuando la app está añadida al home screen,
-respetar la zona del notch/dynamic island y el home indicator */
-@supports (padding: env(safe-area-inset-top)) {
-.topbar {
-padding-top: calc(14px + env(safe-area-inset-top));
-padding-left: calc(22px + env(safe-area-inset-left));
-padding-right: calc(22px + env(safe-area-inset-right));
-}
-.controls {
-padding-left: calc(22px + env(safe-area-inset-left));
-padding-right: calc(22px + env(safe-area-inset-right));
-}
-.canvas-wrap, .list-view {
-padding-bottom: env(safe-area-inset-bottom);
-}
-.hud-corner.tl { top: calc(8px + env(safe-area-inset-top)); left: calc(8px + env(safe-area-inset-left)); }
-.hud-corner.tr { top: calc(8px + env(safe-area-inset-top)); right: calc(8px + env(safe-area-inset-right)); }
-.hud-corner.bl { bottom: calc(8px + env(safe-area-inset-bottom)); left: calc(8px + env(safe-area-inset-left)); }
-.hud-corner.br { bottom: calc(8px + env(safe-area-inset-bottom)); right: calc(8px + env(safe-area-inset-right)); }
-}
+  /* Glow sutil en el fondo */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0, 240, 255, 0.06), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 43, 214, 0.04), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
-/* Cyberpunk grid background */
-body::before {
-content: “”;
-position: fixed;
-inset: 0;
-background-image:
-linear-gradient(rgba(0, 240, 255, 0.025) 1px, transparent 1px),
-linear-gradient(90deg, rgba(0, 240, 255, 0.025) 1px, transparent 1px);
-background-size: 48px 48px;
-pointer-events: none;
-z-index: 0;
-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.9), transparent 70%);
-}
+  /* ===== HEADER ===== */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 14px 16px;
+    padding-top: calc(14px + env(safe-area-inset-top));
+    background: rgba(5, 6, 10, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
 
-/* Synthwave glow blobs */
-body::after {
-content: “”;
-position: fixed;
-inset: 0;
-background:
-radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0, 240, 255, 0.08), transparent 60%),
-radial-gradient(ellipse 60% 40% at 15% 100%, rgba(255, 43, 214, 0.08), transparent 60%),
-radial-gradient(ellipse 60% 40% at 85% 100%, rgba(138, 43, 255, 0.06), transparent 60%);
-pointer-events: none;
-z-index: 0;
-}
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+    min-width: 0;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: linear-gradient(135deg, rgba(0,240,255,0.12), rgba(255,43,214,0.10));
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-family: 'Orbitron', serif;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 1;
+    box-shadow:
+      0 0 14px rgba(0, 240, 255, 0.3),
+      0 0 24px rgba(255, 43, 214, 0.15);
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.7);
+  }
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    min-width: 0;
+  }
+  .brand-title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    color: #f4faff;
+    white-space: nowrap;
+  }
+  .brand-title .pro {
+    color: var(--magenta);
+    font-style: italic;
+    margin-left: 3px;
+    text-shadow: 0 0 8px rgba(255, 43, 214, 0.6);
+  }
+  .brand-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--text-faint);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
 
-/* Subtle scanlines overlay */
-.scanlines {
-position: fixed;
-inset: 0;
-background: repeating-linear-gradient(
-to bottom,
-rgba(255, 255, 255, 0.012) 0px,
-rgba(255, 255, 255, 0.012) 1px,
-transparent 1px,
-transparent 3px
-);
-pointer-events: none;
-z-index: 200;
-}
+  /* TAO ticker compacto */
+  .tao-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.1;
+    flex-shrink: 0;
+    font-family: 'Share Tech Mono', monospace;
+  }
+  .tao-label {
+    font-size: 9px;
+    color: var(--text-faint);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .tao-price {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-top: 2px;
+  }
+  .tao-change {
+    font-size: 11px;
+    margin-top: 1px;
+  }
+  .tao-change.pos { color: var(--green); }
+  .tao-change.neg { color: var(--red); }
 
-/* HUD corners */
-.hud-corner {
-position: fixed;
-width: 22px; height: 22px;
-border: 1px solid rgba(0, 240, 255, 0.4);
-z-index: 150;
-pointer-events: none;
-}
-.hud-corner.tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
-.hud-corner.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
-.hud-corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
-.hud-corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+  /* ===== STATS BAR ===== */
+  .stats-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace;
+    gap: 12px;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-faint);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .stat-value {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+  }
 
-/* ===== HEADER ===== */
-.topbar {
-position: relative;
-z-index: 10;
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 14px 22px;
-border-bottom: 1px solid var(–border);
-background: rgba(5, 6, 10, 0.85);
-backdrop-filter: blur(12px);
-box-shadow: 0 1px 0 rgba(0, 240, 255, 0.04);
-}
+  /* ===== CONTROLS BAR ===== */
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(13, 15, 23, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
 
-.brand {
-display: flex;
-align-items: center;
-gap: 14px;
-}
+  .currency-toggle {
+    display: inline-flex;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2px;
+  }
+  .currency-toggle button {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    min-width: 36px;
+  }
+  .currency-toggle button.active {
+    background: rgba(0, 240, 255, 0.1);
+    color: var(--cyan);
+    text-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
+  }
 
-/* τ brand mark with glitch glow */
-.brand-mark {
-width: 38px; height: 38px;
-border-radius: 9px;
-background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(255, 43, 214, 0.12));
-border: 1px solid rgba(0, 240, 255, 0.4);
-display: grid; place-items: center;
-color: #fff;
-font-family: var(–font-display);
-font-weight: 900;
-font-size: 22px;
-line-height: 1;
-box-shadow:
-0 0 18px rgba(0, 240, 255, 0.45),
-0 0 32px rgba(255, 43, 214, 0.25),
-inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-text-shadow:
-0 0 8px rgba(0, 240, 255, 0.9),
-0 0 16px rgba(255, 43, 214, 0.6);
-position: relative;
-flex-shrink: 0;
-}
-.brand-mark::before {
-content: “τ”;
-position: absolute;
-top: 50%; left: 50%;
-transform: translate(calc(-50% - 1.5px), -50%);
-color: var(–neon-cyan);
-mix-blend-mode: screen;
-opacity: 0.6;
-pointer-events: none;
-}
-.brand-mark::after {
-content: “τ”;
-position: absolute;
-top: 50%; left: 50%;
-transform: translate(calc(-50% + 1.5px), -50%);
-color: var(–neon-magenta);
-mix-blend-mode: screen;
-opacity: 0.6;
-pointer-events: none;
-}
+  .search {
+    flex: 1;
+    position: relative;
+  }
+  .search input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 13px;
+    padding: 8px 12px 8px 32px;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search input::placeholder { color: var(--text-faint); }
+  .search input:focus { border-color: var(--cyan); }
+  .search::before {
+    content: "⌕";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--cyan);
+    font-size: 14px;
+    opacity: 0.7;
+  }
 
-.brand-name {
-display: flex;
-flex-direction: column;
-gap: 2px;
-line-height: 1;
-}
-.brand-title {
-font-family: var(–font-display);
-font-weight: 800;
-font-size: 19px;
-letter-spacing: 0.06em;
-text-transform: uppercase;
-color: #f4faff;
-text-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
-}
-.brand-title .pro {
-color: var(–neon-magenta);
-font-style: italic;
-text-shadow: 0 0 10px rgba(255, 43, 214, 0.7);
-margin-left: 4px;
-}
-.brand-sub {
-font-family: var(–font-mono);
-font-size: 9.5px;
-color: var(–text-faint);
-letter-spacing: 0.22em;
-text-transform: uppercase;
-}
+  /* ===== LIST ===== */
+  .list {
+    position: relative;
+    z-index: 1;
+  }
 
-.topbar-right {
-display: flex;
-align-items: center;
-gap: 22px;
-}
+  .list-row {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) 80px 70px;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .list-row:active {
+    background: rgba(0, 240, 255, 0.04);
+  }
+  @media (hover: hover) {
+    .list-row:hover { background: rgba(0, 240, 255, 0.04); }
+  }
 
-.ticker {
-display: flex;
-align-items: center;
-gap: 22px;
-font-family: var(–font-mono);
-font-size: 12px;
-}
-.ticker-item { display: flex; flex-direction: column; gap: 2px; }
-.ticker-label {
-color: var(–text-faint);
-font-size: 9.5px;
-letter-spacing: 0.18em;
-text-transform: uppercase;
-}
-.ticker-value { color: var(–text); font-weight: 500; }
-.pos { color: var(–green); }
-.neg { color: var(–red); }
+  .rank {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: center;
+  }
+  .subnet-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .subnet-symbol {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .subnet-meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .price {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .change {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .change.pos { color: var(--green); }
+  .change.neg { color: var(--red); }
+  .change.zero { color: var(--text-dim); }
 
-/* Currency toggle */
-.currency-toggle {
-display: inline-flex;
-background: var(–bg-elev);
-border: 1px solid var(–border);
-border-radius: 10px;
-padding: 3px;
-gap: 2px;
-}
-.currency-toggle button {
-background: transparent;
-border: none;
-color: var(–text-dim);
-padding: 6px 12px;
-border-radius: 7px;
-font-family: var(–font-mono);
-font-size: 13px;
-font-weight: 500;
-cursor: pointer;
-transition: all 0.15s ease;
-min-width: 36px;
-}
-.currency-toggle button:hover { color: var(–text); }
-.currency-toggle button.active {
-background: var(–bg-elev-2);
-color: var(–neon-cyan);
-box-shadow:
-inset 0 0 0 1px var(–border-strong),
-0 0 12px rgba(0, 240, 255, 0.2);
-text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
-}
+  /* Estado de carga / vacío */
+  .empty-state {
+    padding: 40px 16px;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-faint);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .loading-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+    margin-right: 8px;
+    animation: pulse 1.4s ease-in-out infinite;
+    vertical-align: middle;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
 
-/* ===== CONTROLS ===== */
-.controls {
-position: relative;
-z-index: 9;
-display: flex;
-align-items: center;
-gap: 12px;
-padding: 10px 22px;
-border-bottom: 1px solid var(–border);
-background: rgba(13, 15, 23, 0.6);
-backdrop-filter: blur(8px);
-flex-wrap: wrap;
-}
+  /* Footer */
+  .footer {
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--text-faint);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .footer .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+    margin-right: 6px;
+    animation: pulse 1.6s ease-in-out infinite;
+    vertical-align: middle;
+  }
+  .footer a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
 
-.segment {
-display: inline-flex;
-background: var(–bg-elev);
-border: 1px solid var(–border);
-border-radius: 10px;
-padding: 3px;
-gap: 2px;
-}
-.segment button {
-background: transparent;
-border: none;
-color: var(–text-dim);
-padding: 6px 12px;
-border-radius: 7px;
-font-family: var(–font-mono);
-font-size: 11px;
-letter-spacing: 0.08em;
-cursor: pointer;
-transition: all 0.15s ease;
-text-transform: uppercase;
-}
-.segment button:hover { color: var(–text); }
-.segment button.active {
-background: var(–bg-elev-2);
-color: var(–neon-cyan);
-box-shadow:
-inset 0 0 0 1px var(–border-strong),
-0 0 10px rgba(0, 240, 255, 0.15);
-text-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
-}
-
-.search {
-flex: 1;
-max-width: 240px;
-position: relative;
-}
-.search input {
-width: 100%;
-background: var(–bg-elev);
-border: 1px solid var(–border);
-color: var(–text);
-font-family: var(–font-ui);
-font-size: 13px;
-padding: 8px 12px 8px 34px;
-border-radius: 10px;
-outline: none;
-transition: all 0.15s;
-}
-.search input::placeholder { color: var(–text-faint); }
-.search input:focus {
-border-color: var(–neon-cyan);
-box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.08);
-}
-.search::before {
-content: “⌕”;
-position: absolute;
-left: 12px;
-top: 50%;
-transform: translateY(-50%);
-color: var(–neon-cyan);
-font-size: 14px;
-opacity: 0.7;
-}
-
-.control-label {
-font-size: 9.5px;
-color: var(–text-faint);
-letter-spacing: 0.2em;
-text-transform: uppercase;
-margin-right: 4px;
-font-family: var(–font-mono);
-}
-
-.legend {
-margin-left: auto;
-display: flex;
-align-items: center;
-gap: 10px;
-font-family: var(–font-mono);
-font-size: 10px;
-color: var(–text-dim);
-}
-.legend-gradient {
-width: 160px;
-height: 10px;
-border-radius: 6px;
-background: linear-gradient(90deg, #ff4d5e 0%, #8a1a27 25%, #2a2d35 50%, #0f7a42 75%, #22d87a 100%);
-box-shadow: inset 0 0 0 1px var(–border);
-}
-
-/* ===== CANVAS ===== */
-.canvas-wrap {
-position: relative;
-width: 100%;
-height: calc(100vh - 122px);
-}
-svg.bubbles {
-position: absolute;
-inset: 0;
-width: 100%;
-height: 100%;
-z-index: 1;
-}
-
-.tile-group { cursor: pointer; }
-.tile-rect { transition: filter 0.2s ease, fill-opacity 0.2s ease; }
-.tile-group:hover .tile-rect {
-filter: brightness(1.4);
-fill-opacity: 0.4;
-}
-.tile-text {
-pointer-events: none;
-user-select: none;
-text-anchor: middle;
-dominant-baseline: middle;
-fill: white;
-}
-.tile-symbol { font-family: var(–font-display); font-weight: 700; letter-spacing: 0.02em; }
-.tile-value { font-family: var(–font-mono); font-weight: 500; }
-.tile-id { font-family: var(–font-mono); font-weight: 400; }
-
-/* ===== TOOLTIP ===== */
-.tooltip {
-position: fixed;
-z-index: 50;
-background: rgba(13, 15, 23, 0.96);
-backdrop-filter: blur(12px);
-border: 1px solid var(–border-strong);
-border-radius: 12px;
-padding: 14px 16px;
-min-width: 240px;
-pointer-events: none;
-opacity: 0;
-transform: translate(-50%, calc(-100% - 14px));
-transition: opacity 0.15s ease;
-box-shadow:
-0 20px 50px rgba(0, 0, 0, 0.6),
-0 0 24px rgba(0, 240, 255, 0.1);
-}
-.tooltip.visible { opacity: 1; }
-.tooltip::after {
-content: “”;
-position: absolute;
-left: 50%;
-bottom: -6px;
-width: 12px; height: 12px;
-background: rgba(13, 15, 23, 0.96);
-border-right: 1px solid var(–border-strong);
-border-bottom: 1px solid var(–border-strong);
-transform: translateX(-50%) rotate(45deg);
-}
-.tt-head {
-display: flex;
-align-items: baseline;
-justify-content: space-between;
-gap: 10px;
-margin-bottom: 8px;
-}
-.tt-symbol {
-font-family: var(–font-display);
-font-size: 18px;
-font-weight: 700;
-letter-spacing: 0.02em;
-color: #f4faff;
-}
-.tt-id {
-font-family: var(–font-mono);
-font-size: 10px;
-color: var(–neon-cyan);
-letter-spacing: 0.14em;
-opacity: 0.8;
-}
-.tt-name {
-font-size: 12px;
-color: var(–text-dim);
-margin-bottom: 10px;
-}
-.tt-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 8px 14px;
-}
-.tt-row { display: flex; flex-direction: column; gap: 2px; }
-.tt-row-label {
-font-size: 9.5px;
-color: var(–text-faint);
-letter-spacing: 0.16em;
-text-transform: uppercase;
-font-family: var(–font-mono);
-}
-.tt-row-value {
-font-family: var(–font-mono);
-font-size: 12.5px;
-color: var(–text);
-font-weight: 500;
-}
-.tt-click-hint {
-margin-top: 10px;
-padding-top: 10px;
-border-top: 1px solid var(–border);
-font-size: 10px;
-color: var(–neon-cyan);
-text-align: center;
-letter-spacing: 0.14em;
-text-transform: uppercase;
-font-family: var(–font-mono);
-opacity: 0.7;
-}
-
-/* ===== SIDE PANEL ===== */
-.backdrop {
-position: fixed;
-inset: 0;
-background: rgba(0, 0, 0, 0.55);
-z-index: 99;
-opacity: 0;
-pointer-events: none;
-transition: opacity 0.3s ease;
-backdrop-filter: blur(4px);
-}
-.backdrop.visible {
-opacity: 1;
-pointer-events: auto;
-}
-
-.side-panel {
-position: fixed;
-top: 0; right: 0; bottom: 0;
-width: 460px;
-max-width: 100vw;
-background: rgba(8, 10, 16, 0.98);
-backdrop-filter: blur(20px);
-border-left: 1px solid var(–border-strong);
-z-index: 100;
-transform: translateX(100%);
-transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-display: flex;
-flex-direction: column;
-overflow-y: auto;
-overflow-x: hidden;
-box-shadow: -20px 0 60px rgba(0, 240, 255, 0.05);
-}
-.side-panel.open { transform: translateX(0); }
-
-.panel-header {
-padding: 20px 24px 18px;
-border-bottom: 1px solid var(–border);
-display: flex;
-align-items: flex-start;
-justify-content: space-between;
-gap: 16px;
-}
-.panel-id {
-font-family: var(–font-mono);
-font-size: 10px;
-color: var(–neon-cyan);
-letter-spacing: 0.18em;
-text-transform: uppercase;
-margin-bottom: 6px;
-opacity: 0.8;
-}
-.panel-symbol {
-font-family: var(–font-display);
-font-size: 30px;
-font-weight: 800;
-letter-spacing: 0.02em;
-line-height: 1;
-margin-bottom: 6px;
-color: #f4faff;
-text-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
-}
-.panel-name {
-font-size: 13px;
-color: var(–text-dim);
-}
-.panel-close {
-background: transparent;
-border: 1px solid var(–border);
-color: var(–text-dim);
-width: 34px; height: 34px;
-border-radius: 9px;
-cursor: pointer;
-font-size: 20px;
-display: grid;
-place-items: center;
-transition: all 0.15s;
-flex-shrink: 0;
-}
-.panel-close:hover {
-border-color: var(–neon-magenta);
-color: var(–neon-magenta);
-background: rgba(255, 43, 214, 0.08);
-box-shadow: 0 0 14px rgba(255, 43, 214, 0.2);
-}
-
-.panel-price-row {
-padding: 18px 24px;
-border-bottom: 1px solid var(–border);
-display: flex;
-align-items: baseline;
-gap: 14px;
-flex-wrap: wrap;
-}
-.panel-price {
-font-family: var(–font-mono);
-font-size: 30px;
-font-weight: 500;
-letter-spacing: -0.01em;
-line-height: 1;
-}
-.panel-change {
-font-family: var(–font-mono);
-font-size: 13px;
-font-weight: 500;
-padding: 4px 10px;
-border-radius: 6px;
-letter-spacing: 0.06em;
-}
-.panel-change.pos { background: rgba(34, 216, 122, 0.12); color: var(–green); }
-.panel-change.neg { background: rgba(255, 77, 94, 0.12); color: var(–red); }
-
-.panel-chart-section {
-padding: 18px 24px;
-border-bottom: 1px solid var(–border);
-}
-.panel-chart-title {
-font-size: 10px;
-color: var(–text-faint);
-letter-spacing: 0.18em;
-text-transform: uppercase;
-margin-bottom: 12px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-font-family: var(–font-mono);
-}
-.panel-chart-controls {
-display: flex;
-gap: 4px;
-padding: 2px;
-background: var(–bg-elev);
-border: 1px solid var(–border);
-border-radius: 8px;
-}
-.panel-chart-controls button {
-background: transparent;
-border: none;
-color: var(–text-dim);
-padding: 4px 10px;
-border-radius: 6px;
-font-family: var(–font-mono);
-font-size: 10px;
-letter-spacing: 0.08em;
-cursor: pointer;
-transition: all 0.15s;
-text-transform: uppercase;
-}
-.panel-chart-controls button:hover { color: var(–text); }
-.panel-chart-controls button.active {
-background: var(–bg-elev-2);
-color: var(–neon-cyan);
-box-shadow: inset 0 0 0 1px var(–border-strong);
-}
-#panel-chart {
-height: 260px;
-width: 100%;
-position: relative;
-}
-#panel-chart .tv-lightweight-charts {
-background: transparent !important;
-}
-
-.panel-stats {
-padding: 20px 24px;
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 18px 22px;
-}
-.panel-stat { display: flex; flex-direction: column; gap: 3px; }
-.panel-stat-label {
-font-size: 9.5px;
-color: var(–text-faint);
-letter-spacing: 0.18em;
-text-transform: uppercase;
-font-family: var(–font-mono);
-}
-.panel-stat-value {
-font-family: var(–font-mono);
-font-size: 13px;
-color: var(–text);
-font-weight: 500;
-}
-
-.panel-link {
-margin: 0 24px 24px;
-padding: 11px 14px;
-background: var(–bg-elev);
-border: 1px solid var(–border);
-border-radius: 10px;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
-color: var(–text-dim);
-font-size: 12px;
-text-decoration: none;
-transition: all 0.15s;
-font-family: var(–font-mono);
-letter-spacing: 0.08em;
-text-transform: uppercase;
-}
-.panel-link:hover {
-color: var(–neon-cyan);
-border-color: var(–neon-cyan);
-background: rgba(0, 240, 255, 0.06);
-box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
-}
-
-/* ===== FOOTER BADGE ===== */
-.footer-badge {
-position: absolute;
-bottom: 14px;
-right: 18px;
-z-index: 5;
-font-family: var(–font-mono);
-font-size: 10px;
-color: var(–text-faint);
-letter-spacing: 0.18em;
-text-transform: uppercase;
-pointer-events: none;
-}
-.footer-badge .live-dot {
-display: inline-block;
-width: 6px; height: 6px;
-border-radius: 50%;
-background: var(–neon-cyan);
-margin-right: 6px;
-box-shadow: 0 0 8px var(–neon-cyan);
-animation: blink 1.4s ease-in-out infinite;
-vertical-align: middle;
-}
-.footer-badge .accent-mag { color: var(–neon-magenta); }
-.footer-badge .accent-cyan { color: var(–neon-cyan); }
-
-@keyframes blink {
-0%, 50% { opacity: 1; }
-51%, 100% { opacity: 0.25; }
-}
-
-/* ===== VIEW TOGGLE ===== */
-.view-toggle {
-display: inline-flex;
-background: var(–bg-elev);
-border: 1px solid var(–border);
-border-radius: 10px;
-padding: 3px;
-gap: 2px;
-}
-.view-toggle button {
-background: transparent;
-border: none;
-color: var(–text-dim);
-padding: 6px 12px;
-border-radius: 7px;
-font-family: var(–font-mono);
-font-size: 11px;
-letter-spacing: 0.08em;
-cursor: pointer;
-transition: all 0.15s ease;
-display: inline-flex;
-align-items: center;
-gap: 7px;
-text-transform: uppercase;
-}
-.view-toggle button:hover { color: var(–text); }
-.view-toggle button.active {
-background: var(–bg-elev-2);
-color: var(–neon-cyan);
-box-shadow:
-inset 0 0 0 1px var(–border-strong),
-0 0 10px rgba(0, 240, 255, 0.15);
-text-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
-}
-.view-toggle button svg { width: 12px; height: 12px; opacity: 0.9; }
-
-/* ===== LIST VIEW ===== */
-.list-view {
-position: relative;
-z-index: 1;
-height: calc(100vh - 122px);
-overflow-y: auto;
-}
-.list-sub-controls {
-display: flex;
-align-items: center;
-gap: 12px;
-padding: 12px 22px;
-border-bottom: 1px solid var(–border);
-background: rgba(13, 15, 23, 0.7);
-position: sticky;
-top: 0;
-z-index: 3;
-backdrop-filter: blur(8px);
-flex-wrap: wrap;
-}
-.list-count {
-margin-left: auto;
-font-family: var(–font-mono);
-font-size: 11px;
-color: var(–text-faint);
-letter-spacing: 0.14em;
-text-transform: uppercase;
-}
-.list-header, .list-row {
-display: grid;
-grid-template-columns: 44px minmax(160px, 1.4fr) 100px 70px 80px 70px 110px 100px 140px;
-gap: 14px;
-padding: 12px 22px;
-align-items: center;
-}
-.list-header {
-position: sticky;
-top: 53px;
-z-index: 2;
-background: rgba(5, 6, 10, 0.95);
-backdrop-filter: blur(8px);
-border-bottom: 1px solid var(–border);
-font-family: var(–font-mono);
-font-size: 10px;
-font-weight: 500;
-color: var(–text-faint);
-letter-spacing: 0.16em;
-text-transform: uppercase;
-}
-.list-header > div {
-cursor: pointer;
-user-select: none;
-transition: color 0.15s;
-display: flex;
-align-items: center;
-gap: 5px;
-}
-.list-header > div:hover { color: var(–text-dim); }
-.list-header .num { justify-content: flex-end; text-align: right; }
-.list-header .sorted {
-color: var(–neon-cyan);
-text-shadow: 0 0 6px rgba(0, 240, 255, 0.4);
-}
-.list-header .sort-icon { font-size: 10px; }
-.list-row {
-border-bottom: 1px solid var(–border);
-cursor: pointer;
-transition: background 0.1s ease;
-}
-.list-row:hover {
-background: rgba(0, 240, 255, 0.03);
-box-shadow: inset 2px 0 0 var(–neon-cyan);
-}
-.list-rank {
-font-family: var(–font-mono);
-font-size: 12px;
-color: var(–text-faint);
-text-align: center;
-}
-.list-subnet {
-display: flex;
-flex-direction: column;
-gap: 3px;
-min-width: 0;
-}
-.list-symbol {
-font-family: var(–font-display);
-font-weight: 700;
-font-size: 15px;
-letter-spacing: 0.02em;
-color: var(–text);
-}
-.list-meta {
-font-size: 11px;
-color: var(–text-dim);
-font-family: var(–font-mono);
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-}
-.list-val {
-font-family: var(–font-mono);
-font-size: 13px;
-text-align: right;
-font-variant-numeric: tabular-nums;
-color: var(–text);
-}
-.list-val.pos { color: var(–green); }
-.list-val.neg { color: var(–red); }
-.list-spark { width: 140px; height: 36px; justify-self: end; }
-.list-spark svg { width: 100%; height: 100%; display: block; }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1150px) {
-.list-header, .list-row {
-grid-template-columns: 40px minmax(140px, 1.2fr) 90px 80px 100px 90px 120px;
-gap: 12px;
-}
-.col-1h, .col-7d { display: none; }
-}
-@media (max-width: 900px) {
-.ticker { display: none; }
-.legend { display: none; }
-}
-@media (max-width: 768px) {
-.controls { padding: 10px 14px; }
-.topbar { padding: 12px 14px; }
-.side-panel { width: 100vw; }
-.brand-sub { display: none; }
-.list-header, .list-row {
-grid-template-columns: 32px minmax(110px, 1fr) 80px 70px 90px;
-gap: 10px;
-padding: 10px 14px;
-}
-.col-1h, .col-7d, .col-vol, .col-spark { display: none; }
-.view-toggle button { padding: 6px 8px; }
-}
+  /* Pequeñas pantallas */
+  @media (max-width: 380px) {
+    .topbar { padding: 12px 12px; }
+    .stats-bar { padding: 10px 12px; }
+    .controls { padding: 10px 12px; }
+    .list-row { padding: 12px 12px; gap: 8px; }
+    .brand-title { font-size: 14px; }
+    .tao-price { font-size: 13px; }
+    .stat-value { font-size: 12px; }
+    .currency-toggle button { padding: 6px 10px; font-size: 12px; min-width: 30px; }
+  }
 </style>
 
 </head>
 <body>
 
-<!-- HUD corners -->
-
-<div class="hud-corner tl"></div>
-<div class="hud-corner tr"></div>
-<div class="hud-corner bl"></div>
-<div class="hud-corner br"></div>
-
-<!-- ============ TOP BAR ============ -->
-
 <header class="topbar">
-  <a href="index.html" class="brand" style="text-decoration: none; color: inherit;">
-    <div class="brand-mark" data-text="τ">τ</div>
-    <div class="brand-name">
-      <span class="brand-title">Bittensor <span class="pro">Pro</span></span>
-      <span class="brand-sub">// Subnet Market · dTAO</span>
+  <a href="index.html" class="brand">
+    <div class="brand-mark">τ</div>
+    <div class="brand-text">
+      <span class="brand-title">Bittensor<span class="pro">Pro</span></span>
+      <span class="brand-sub">Subnet Market</span>
     </div>
   </a>
-  <div class="topbar-right">
-    <div class="ticker">
-      <div class="ticker-item">
-        <span class="ticker-label">TAO</span>
-        <span class="ticker-value" id="tao-price">$412.87</span>
-      </div>
-      <div class="ticker-item">
-        <span class="ticker-label">24h</span>
-        <span class="ticker-value pos" id="tao-change">+3.42%</span>
-      </div>
-      <div class="ticker-item">
-        <span class="ticker-label">Subnets</span>
-        <span class="ticker-value" id="subnet-count">—</span>
-      </div>
-      <div class="ticker-item">
-        <span class="ticker-label">Total Mcap</span>
-        <span class="ticker-value" id="total-mcap">—</span>
-      </div>
-    </div>
-    <div class="view-toggle" id="view-seg">
-      <button data-view="bubbles" class="active">
-        <svg viewBox="0 0 12 12" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="0.5"/><rect x="8" y="1" width="3" height="3" rx="0.4"/><rect x="8" y="5" width="3" height="3" rx="0.4"/><rect x="1" y="8" width="4" height="3" rx="0.4"/><rect x="6" y="9" width="5" height="2" rx="0.4"/></svg>
-        Heatmap
-      </button>
-      <button data-view="list">
-        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><line x1="2" y1="3" x2="10" y2="3"/><line x1="2" y1="6" x2="10" y2="6"/><line x1="2" y1="9" x2="10" y2="9"/></svg>
-        List
-      </button>
-    </div>
-    <div class="currency-toggle" id="currency-seg">
-      <button data-cur="USD" class="active">$</button>
-      <button data-cur="TAO">τ</button>
-    </div>
+  <div class="tao-info">
+    <span class="tao-label">TAO</span>
+    <span class="tao-price" id="tao-price">—</span>
+    <span class="tao-change" id="tao-change">—</span>
   </div>
 </header>
 
-<!-- ============ CONTROLS ============ -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-label">Subnets</span>
+    <span class="stat-value" id="stat-count">—</span>
+  </div>
+  <div class="stat" style="text-align: center;">
+    <span class="stat-label">Total Mcap</span>
+    <span class="stat-value" id="stat-mcap">—</span>
+  </div>
+  <div class="stat" style="text-align: right;">
+    <span class="stat-label">Volume 24h</span>
+    <span class="stat-value" id="stat-vol">—</span>
+  </div>
+</div>
 
 <div class="controls">
-  <span class="control-label">Time</span>
-  <div class="segment" id="timeframe-seg">
-    <button data-tf="1h">1H</button>
-    <button data-tf="24h" class="active">24H</button>
-    <button data-tf="7d">7D</button>
-    <button data-tf="30d">30D</button>
+  <div class="currency-toggle" id="cur-toggle">
+    <button data-cur="USD" class="active">$</button>
+    <button data-cur="TAO">τ</button>
   </div>
-
-<span class="control-label">Show</span>
-
-  <div class="segment" id="show-seg">
-    <button data-show="change" class="active">%</button>
-    <button data-show="price">PRICE</button>
-    <button data-show="marketCap">MCAP</button>
-    <button data-show="volume">VOL</button>
-  </div>
-
-<span class="control-label">Top</span>
-
-  <div class="segment" id="topn-seg">
-    <button data-topn="10">10</button>
-    <button data-topn="20" class="active">20</button>
-    <button data-topn="50">50</button>
-    <button data-topn="100">100</button>
-    <button data-topn="all">ALL</button>
-  </div>
-
-<span class="control-label">Top</span>
-
-  <div class="segment" id="topn-seg">
-    <button data-topn="25">25</button>
-    <button data-topn="50" class="active">50</button>
-    <button data-topn="all">All</button>
-  </div>
-
   <div class="search">
-    <input type="text" id="search" placeholder="Buscar subnet... (APEX, 18, Cortex)" />
-  </div>
-
-  <div class="legend">
-    <span>−10%</span>
-    <div class="legend-gradient"></div>
-    <span>+10%</span>
+    <input type="text" id="search" placeholder="Buscar subnet..." />
   </div>
 </div>
 
-<!-- ============ BUBBLE CANVAS ============ -->
-
-<div class="canvas-wrap">
-  <svg class="bubbles" id="bubbles"></svg>
-  <div class="footer-badge">
-    <span class="live-dot"></span>Live · <span class="accent-cyan">Bittensor</span> <span class="accent-mag">Pro</span> · dTAO Market
+<div class="list" id="list">
+  <div class="empty-state">
+    <span class="loading-dot"></span>Cargando datos…
   </div>
 </div>
 
-<!-- ============ LIST VIEW ============ -->
-
-<div class="list-view" id="list-view" style="display:none">
-  <div class="list-sub-controls">
-    <span class="control-label">Chart range</span>
-    <div class="segment" id="sparkline-seg">
-      <button data-range="24h">24H</button>
-      <button data-range="7d" class="active">1W</button>
-    </div>
-    <div class="list-count" id="list-count">—</div>
-  </div>
-  <div class="list-header" id="list-header">
-    <div class="col-rank" data-sort="id">#</div>
-    <div class="col-subnet" data-sort="symbol">Subnet</div>
-    <div class="col-price num" data-sort="price">Price</div>
-    <div class="col-1h num" data-sort="change1h">1H %</div>
-    <div class="col-24h num" data-sort="change24h">24H %</div>
-    <div class="col-7d num" data-sort="change7d">7D %</div>
-    <div class="col-mcap num sorted" data-sort="marketCap">Market Cap <span class="sort-icon">↓</span></div>
-    <div class="col-vol num" data-sort="volume">Volume</div>
-    <div class="col-spark num">Chart</div>
-  </div>
-  <div id="list-body"></div>
+<div class="footer">
+  <span class="live-dot"></span>
+  Live · <a href="index.html">Bittensor Pro</a> · Datos: Taostats
 </div>
-
-<!-- ============ TOOLTIP ============ -->
-
-<div class="tooltip" id="tooltip">
-  <div class="tt-head">
-    <span class="tt-symbol" id="tt-symbol">—</span>
-    <span class="tt-id" id="tt-id">SN—</span>
-  </div>
-  <div class="tt-name" id="tt-name">—</div>
-  <div class="tt-grid">
-    <div class="tt-row"><span class="tt-row-label">Price</span><span class="tt-row-value" id="tt-price">—</span></div>
-    <div class="tt-row"><span class="tt-row-label">Change</span><span class="tt-row-value" id="tt-change">—</span></div>
-    <div class="tt-row"><span class="tt-row-label">Market Cap</span><span class="tt-row-value" id="tt-mcap">—</span></div>
-    <div class="tt-row"><span class="tt-row-label">Volume 24h</span><span class="tt-row-value" id="tt-vol">—</span></div>
-  </div>
-  <div class="tt-click-hint">Click para ver gráfica</div>
-</div>
-
-<!-- ============ BACKDROP + SIDE PANEL ============ -->
-
-<div class="backdrop" id="backdrop"></div>
-
-<aside class="side-panel" id="side-panel">
-  <div class="panel-header">
-    <div>
-      <div class="panel-id" id="panel-id">SN —</div>
-      <div class="panel-symbol" id="panel-symbol">—</div>
-      <div class="panel-name" id="panel-name">—</div>
-    </div>
-    <button class="panel-close" id="panel-close" title="Cerrar (Esc)">×</button>
-  </div>
-
-  <div class="panel-price-row">
-    <div class="panel-price" id="panel-price">—</div>
-    <div class="panel-change" id="panel-change">—</div>
-  </div>
-
-  <div class="panel-chart-section">
-    <div class="panel-chart-title">
-      <span>Price History</span>
-      <div class="panel-chart-controls" id="panel-chart-controls">
-        <button data-range="24h">24H</button>
-        <button data-range="7d" class="active">7D</button>
-      </div>
-    </div>
-    <div id="panel-chart"></div>
-  </div>
-
-  <div class="panel-stats">
-    <div class="panel-stat"><span class="panel-stat-label">Market Cap</span><span class="panel-stat-value" id="panel-mcap">—</span></div>
-    <div class="panel-stat"><span class="panel-stat-label">Volume 24h</span><span class="panel-stat-value" id="panel-vol">—</span></div>
-    <div class="panel-stat"><span class="panel-stat-label">Emissions</span><span class="panel-stat-value" id="panel-emit">—</span></div>
-    <div class="panel-stat"><span class="panel-stat-label">Owner</span><span class="panel-stat-value" id="panel-owner">—</span></div>
-    <div class="panel-stat"><span class="panel-stat-label">Change 1h</span><span class="panel-stat-value" id="panel-1h">—</span></div>
-    <div class="panel-stat"><span class="panel-stat-label">Change 30d</span><span class="panel-stat-value" id="panel-30d">—</span></div>
-  </div>
-
-<a class="panel-link" id="panel-link" href="#" target="_blank" rel="noopener">Ver en Taostats →</a>
-
-</aside>
-
-<!-- Scanlines overlay (top-most) -->
-
-<div class="scanlines"></div>
 
 <script>
+"use strict";
+
 /* =========================================================================
    CONFIG
    ========================================================================= */
 const API_BASE = 'https://tao360.qrchd889gj.workers.dev';
+const RAO = 1_000_000_000;
 
 /* =========================================================================
-   SUBNETS DE BITTENSOR — fuente oficial: github.com/taostat/subnets-infos
-   Para netuid 75-128 los datos vienen en directo desde Taostats API
+   DICCIONARIO DE SUBNETS (nombres legibles cuando Taostats no los da bien)
    ========================================================================= */
-const SUBNET_DEFS = [
-  { id: 1,  symbol: 'APEX',     name: 'Apex',                          owner: 'Macrocosmos' },
-  { id: 2,  symbol: 'OMRON',    name: 'Omron',                         owner: 'Inference Labs' },
-  { id: 3,  symbol: 'TEMPLAR',  name: 'Templar',                       owner: 'Templar' },
-  { id: 4,  symbol: 'TARGON',   name: 'Targon',                        owner: 'Manifold' },
-  { id: 5,  symbol: 'KAITO',    name: 'Open Kaito',                    owner: 'Kaito AI' },
-  { id: 6,  symbol: 'INFINITE', name: 'Infinite Games',                owner: 'Infinite Games' },
-  { id: 7,  symbol: 'SUBVTX',   name: 'SubVortex',                     owner: 'Eclipse Vortex' },
-  { id: 8,  symbol: 'PTN',      name: 'Proprietary Trading Network',   owner: 'Taoshi' },
-  { id: 9,  symbol: 'PRE',      name: 'Pretraining',                   owner: 'Macrocosmos' },
-  { id: 10, symbol: 'STURDY',   name: 'Sturdy',                        owner: 'Sturdy Finance' },
-  { id: 11, symbol: 'DIPPY',    name: 'Dippy Roleplay',                owner: 'Impel Intelligence' },
-  { id: 12, symbol: 'HORDE',    name: 'ComputeHorde',                  owner: 'Backend Developers' },
-  { id: 13, symbol: 'DATA',     name: 'Data Universe',                 owner: 'Macrocosmos' },
-  { id: 14, symbol: 'VSTORE',   name: 'VectorStore',                   owner: 'Vector Pool' },
-  { id: 15, symbol: 'DEVAL',    name: 'De-Val',                        owner: 'De-Val' },
-  { id: 16, symbol: 'BITADS',   name: 'BitAds',                        owner: 'BitAds' },
-  { id: 17, symbol: '3GEN',     name: 'Three Gen',                     owner: '404 Repo' },
-  { id: 18, symbol: 'CORTEX',   name: 'Cortex.t',                      owner: 'Corcel' },
-  { id: 19, symbol: 'NINETN',   name: 'Nineteen',                      owner: 'Rayon Labs' },
-  { id: 20, symbol: 'BITAGT',   name: 'BitAgent · Rizzo',              owner: 'Rogue Tensor' },
-  { id: 21, symbol: 'A2A',      name: 'Omega Any-to-Any',              owner: 'Omega Labs' },
-  { id: 22, symbol: 'DSEARCH',  name: 'Desearch',                      owner: 'Datura AI' },
-  { id: 23, symbol: 'SOCIAL',   name: 'SocialTensor',                  owner: 'NicheTensor' },
-  { id: 24, symbol: 'OMEGA',    name: 'Omega',                         owner: 'Omega Labs' },
-  { id: 25, symbol: 'FOLD',     name: 'Protein Folding',               owner: 'Macrocosmos' },
-  { id: 26, symbol: 'SN26',     name: 'Subnet 26',                     owner: '—' },
-  { id: 27, symbol: 'NICOMP',   name: 'NI Compute',                    owner: 'Neural Internet' },
-  { id: 28, symbol: 'LOL',      name: 'LOL',                           owner: 'Tao Accumulation Corp' },
-  { id: 29, symbol: 'COLDINT',  name: 'Coldint',                       owner: 'Coldint' },
-  { id: 30, symbol: 'BET',      name: 'Bettensor',                     owner: 'Bettensor' },
-  { id: 31, symbol: 'NAS',      name: 'NAS Chain',                     owner: 'NeuronLogic' },
-  { id: 32, symbol: 'ITSAI',    name: "It's AI",                       owner: "It's AI" },
-  { id: 33, symbol: 'READY',    name: 'ReadyAI',                       owner: 'Afterparty AI' },
-  { id: 34, symbol: 'BITMIND',  name: 'BitMind',                       owner: 'BitMind' },
-  { id: 35, symbol: 'LOGIC',    name: 'LogicNet',                      owner: 'LogicNet' },
-  { id: 36, symbol: 'WEBAGT',   name: 'Web Agents · Autoppia',         owner: 'Autoppia' },
-  { id: 37, symbol: 'FT',       name: 'Finetuning',                    owner: 'Macrocosmos' },
-  { id: 38, symbol: 'DT',       name: 'Distributed Training',          owner: 'KMFODA' },
-  { id: 39, symbol: 'EDGE',     name: 'EdgeMaxxing',                   owner: 'WOMBO' },
-  { id: 40, symbol: 'CHUNK',    name: 'Chunking',                      owner: 'VectorChat' },
-  { id: 41, symbol: 'SPORT',    name: 'Sportstensor',                  owner: 'Sportstensor' },
-  { id: 42, symbol: 'MASA',     name: 'Real-Time Data by Masa',        owner: 'Masa' },
-  { id: 43, symbol: 'GRAPH',    name: 'Graphite',                      owner: 'Graphite AI' },
-  { id: 44, symbol: 'SCORE',    name: 'Score',                         owner: 'Score Technologies' },
-  { id: 45, symbol: 'SWE',      name: 'SWE · Rizzo',                   owner: 'Brokespace' },
-  { id: 46, symbol: 'NEUR3D',   name: 'Neural3D',                      owner: 'GoNeuralAI' },
-  { id: 47, symbol: 'COND',     name: 'Condense AI',                   owner: 'Condense' },
-  { id: 48, symbol: 'NEXT',     name: 'Nextplace AI',                  owner: 'Nickel5' },
-  { id: 49, symbol: 'HIVE',     name: 'Hivetrain AutoML',              owner: 'Hivetrain' },
-  { id: 50, symbol: 'SYNTH',    name: 'Synth',                         owner: 'Mode Network' },
-  { id: 51, symbol: 'CELIUM',   name: 'Compute Subnet',                owner: 'Datura' },
-  { id: 52, symbol: 'DOJO',     name: 'Dojo',                          owner: 'Tensorplex' },
-  { id: 53, symbol: 'EF',       name: 'Efficient Frontier',            owner: 'SignalPlus' },
-  { id: 54, symbol: 'WGENIE',   name: 'WebGenieAI',                    owner: 'WebGenieAI' },
-  { id: 55, symbol: 'PRECOG',   name: 'Precog',                        owner: 'Coin Metrics' },
-  { id: 56, symbol: 'GRAD',     name: 'Gradients',                     owner: 'Rayon Labs' },
-  { id: 57, symbol: 'GAIA',     name: 'Gaia',                          owner: 'Nickel5' },
-  { id: 58, symbol: 'SPEECH',   name: 'Dippy Speech',                  owner: 'Impel Intelligence' },
-  { id: 59, symbol: 'ARENA',    name: 'Agent Arena by Masa',           owner: 'Masa' },
-  { id: 60, symbol: 'BITSEC',   name: 'Bitsec',                        owner: 'Bitsec' },
-  { id: 61, symbol: 'RED',      name: 'Red Team',                      owner: 'Innerworks' },
-  { id: 62, symbol: 'AGT',      name: 'AgenTao',                       owner: 'Tao Agents' },
-  { id: 63, symbol: 'SN63',     name: 'Subnet 63',                     owner: '—' },
-  { id: 64, symbol: 'CHUTES',   name: 'Chutes',                        owner: 'Rayon Labs' },
-  { id: 65, symbol: 'TPN',      name: 'TAO Private Network',           owner: 'Beyond Stake' },
-  { id: 66, symbol: 'FAKEN',    name: 'FakeNews',                      owner: 'Gutenberg Team' },
-  { id: 67, symbol: 'SN67',     name: 'Subnet 67',                     owner: '—' },
-  { id: 68, symbol: 'NOVA',     name: 'Nova',                          owner: 'Metanova Labs' },
-  { id: 69, symbol: 'SN69',     name: 'Subnet 69',                     owner: '—' },
-  { id: 70, symbol: 'SN70',     name: 'Subnet 70',                     owner: '—' },
-  { id: 71, symbol: 'SN71',     name: 'Subnet 71',                     owner: '—' },
-  { id: 72, symbol: 'SN72',     name: 'Subnet 72',                     owner: '—' },
-  { id: 73, symbol: 'SN73',     name: 'Subnet 73',                     owner: '—' },
-  { id: 74, symbol: 'SN74',     name: 'Subnet 74',                     owner: '—' },
-];
-
-// Generar placeholders para subnets 75-128 (Taostats API los rellena en vivo)
-for (let i = 75; i <= 128; i++) {
-  SUBNET_DEFS.push({
-    id: i,
-    symbol: `SN${i}`,
-    name: `Subnet ${i}`,
-    owner: '—',
-  });
-}
+const SUBNET_DEFS = {
+  1:  { symbol: 'APEX',     name: 'Apex' },
+  2:  { symbol: 'OMRON',    name: 'Omron' },
+  3:  { symbol: 'TEMPLAR',  name: 'Templar' },
+  4:  { symbol: 'TARGON',   name: 'Targon' },
+  5:  { symbol: 'KAITO',    name: 'Open Kaito' },
+  6:  { symbol: 'INFINITE', name: 'Infinite Games' },
+  7:  { symbol: 'SUBVTX',   name: 'SubVortex' },
+  8:  { symbol: 'PTN',      name: 'Proprietary Trading' },
+  9:  { symbol: 'PRE',      name: 'Pretraining' },
+  10: { symbol: 'STURDY',   name: 'Sturdy' },
+  11: { symbol: 'DIPPY',    name: 'Dippy Roleplay' },
+  12: { symbol: 'HORDE',    name: 'ComputeHorde' },
+  13: { symbol: 'DATA',     name: 'Data Universe' },
+  14: { symbol: 'VSTORE',   name: 'VectorStore' },
+  15: { symbol: 'DEVAL',    name: 'De-Val' },
+  16: { symbol: 'BITADS',   name: 'BitAds' },
+  17: { symbol: '3GEN',     name: 'Three Gen' },
+  18: { symbol: 'CORTEX',   name: 'Cortex.t' },
+  19: { symbol: 'NINETN',   name: 'Nineteen' },
+  20: { symbol: 'BITAGT',   name: 'BitAgent' },
+  21: { symbol: 'A2A',      name: 'Omega Any-to-Any' },
+  22: { symbol: 'DSEARCH',  name: 'Desearch' },
+  23: { symbol: 'SOCIAL',   name: 'SocialTensor' },
+  24: { symbol: 'OMEGA',    name: 'Omega' },
+  25: { symbol: 'FOLD',     name: 'Protein Folding' },
+  27: { symbol: 'NICOMP',   name: 'NI Compute' },
+  28: { symbol: 'LOL',      name: 'LOL' },
+  29: { symbol: 'COLDINT',  name: 'Coldint' },
+  30: { symbol: 'BET',      name: 'Bettensor' },
+  31: { symbol: 'NAS',      name: 'NAS Chain' },
+  32: { symbol: 'ITSAI',    name: "It's AI" },
+  33: { symbol: 'READY',    name: 'ReadyAI' },
+  34: { symbol: 'BITMIND',  name: 'BitMind' },
+  35: { symbol: 'LOGIC',    name: 'LogicNet' },
+  36: { symbol: 'WEBAGT',   name: 'Web Agents' },
+  37: { symbol: 'FT',       name: 'Finetuning' },
+  38: { symbol: 'DT',       name: 'Distributed Training' },
+  39: { symbol: 'EDGE',     name: 'EdgeMaxxing' },
+  40: { symbol: 'CHUNK',    name: 'Chunking' },
+  41: { symbol: 'SPORT',    name: 'Sportstensor' },
+  42: { symbol: 'MASA',     name: 'Masa' },
+  43: { symbol: 'GRAPH',    name: 'Graphite' },
+  44: { symbol: 'SCORE',    name: 'Score' },
+  45: { symbol: 'SWE',      name: 'SWE' },
+  46: { symbol: 'NEUR3D',   name: 'Neural3D' },
+  47: { symbol: 'COND',     name: 'Condense AI' },
+  48: { symbol: 'NEXT',     name: 'Nextplace AI' },
+  49: { symbol: 'HIVE',     name: 'Hivetrain' },
+  50: { symbol: 'SYNTH',    name: 'Synth' },
+  51: { symbol: 'CELIUM',   name: 'Compute Subnet' },
+  52: { symbol: 'DOJO',     name: 'Dojo' },
+  53: { symbol: 'EF',       name: 'Efficient Frontier' },
+  54: { symbol: 'WGENIE',   name: 'WebGenieAI' },
+  55: { symbol: 'PRECOG',   name: 'Precog' },
+  56: { symbol: 'GRAD',     name: 'Gradients' },
+  57: { symbol: 'GAIA',     name: 'Gaia' },
+  58: { symbol: 'SPEECH',   name: 'Dippy Speech' },
+  59: { symbol: 'ARENA',    name: 'Agent Arena' },
+  60: { symbol: 'BITSEC',   name: 'Bitsec' },
+  61: { symbol: 'RED',      name: 'Red Team' },
+  62: { symbol: 'AGT',      name: 'AgenTao' },
+  64: { symbol: 'CHUTES',   name: 'Chutes' },
+  65: { symbol: 'TPN',      name: 'TAO Private Network' },
+  66: { symbol: 'FAKEN',    name: 'FakeNews' },
+  68: { symbol: 'NOVA',     name: 'Nova' },
+};
 
 /* =========================================================================
-   UTILS
-   ========================================================================= */
-function seedRandom(seed) {
-  let s = seed % 233280;
-  if (s <= 0) s += 233280;
-  return () => {
-    s = (s * 9301 + 49297) % 233280;
-    return s / 233280;
-  };
-}
-
-let TAO_USD = 239.38;
-let TAO_CHANGE_24H = -2.23;
-
-function buildMockData() {
-  const rnd = seedRandom(42);
-  return SUBNET_DEFS.map((def, i) => {
-    const rank = i + 1;
-    const baseMcap = 850000 * Math.pow(0.91, rank) * (0.7 + rnd() * 0.6);
-    const marketCap = Math.max(2500, Math.round(baseMcap));
-    const price = (marketCap / (1_000_000 + rnd() * 5_000_000));
-    const volume = marketCap * (0.03 + rnd() * 0.25);
-    const emissions = marketCap * (0.0003 + rnd() * 0.0015);
-    const base = (rnd() - 0.5) * 12;
-    const tailHit = rnd() < 0.12 ? (rnd() - 0.5) * 30 : 0;
-    const change24h = Math.max(-45, Math.min(55, base + tailHit));
-    return {
-      ...def,
-      price, marketCap, volume, emissions,
-      change1h: change24h * 0.15 + (rnd() - 0.5) * 2,
-      change24h,
-      change7d: change24h * 1.6 + (rnd() - 0.5) * 10,
-      change30d: change24h * 2.4 + (rnd() - 0.5) * 25,
-    };
-  });
-}
-
-/* =========================================================================
-   STATE
+   ESTADO
    ========================================================================= */
 const STATE = {
-  view: 'bubbles',
-  timeframe: '24h',
-  sizeMetric: 'marketCap',
-  displayMetric: 'change',
+  data: [],
   currency: 'USD',
   search: '',
-  data: buildMockData(),
-  selected: null,
-  chartRange: '7d',
-  chart: null,
-  series: null,
-  sortBy: 'marketCap',
-  sortDir: 'desc',
-  sparklineRange: '7d',
-  topN: 20,  // 10, 20, 50, 100, o 'all'
+  taoUsd: 0,
+  taoChange: 0,
 };
 
 /* =========================================================================
    FORMATTERS
    ========================================================================= */
-function fmtTAO(v) {
-  if (v >= 1e9) return (v / 1e9).toFixed(2) + 'B τ';
-  if (v >= 1e6) return (v / 1e6).toFixed(2) + 'M τ';
-  if (v >= 1e3) return (v / 1e3).toFixed(1) + 'K τ';
-  return v.toFixed(0) + ' τ';
-}
-function fmtUSD(vTao) {
-  const usd = vTao * TAO_USD;
-  if (usd >= 1e9) return '$' + (usd / 1e9).toFixed(2) + 'B';
-  if (usd >= 1e6) return '$' + (usd / 1e6).toFixed(2) + 'M';
-  if (usd >= 1e3) return '$' + (usd / 1e3).toFixed(1) + 'K';
-  return '$' + usd.toFixed(0);
-}
-function fmtMoney(vTao) {
-  return STATE.currency === 'USD' ? fmtUSD(vTao) : fmtTAO(vTao);
-}
-function fmtPriceTAO(p) {
-  if (p < 0.001) return p.toExponential(2) + ' τ';
-  if (p < 1) return p.toFixed(4) + ' τ';
-  return p.toFixed(3) + ' τ';
-}
-function fmtPriceUSD(pTao) {
-  const usd = pTao * TAO_USD;
+function fmtPriceUSD(taoPrice) {
+  const usd = taoPrice * STATE.taoUsd;
+  if (usd === 0) return '—';
   if (usd < 0.01) return '$' + usd.toFixed(5);
   if (usd < 1) return '$' + usd.toFixed(3);
   if (usd < 100) return '$' + usd.toFixed(2);
   return '$' + usd.toFixed(1);
 }
-function fmtPrice(pTao) {
-  return STATE.currency === 'USD' ? fmtPriceUSD(pTao) : fmtPriceTAO(pTao);
+function fmtPriceTAO(p) {
+  if (p === 0) return '—';
+  if (p < 0.001) return p.toExponential(2) + 'τ';
+  if (p < 1) return p.toFixed(4) + 'τ';
+  return p.toFixed(3) + 'τ';
 }
+function fmtPrice(p) {
+  return STATE.currency === 'USD' ? fmtPriceUSD(p) : fmtPriceTAO(p);
+}
+
+function fmtMoneyUSD(taoVal) {
+  const usd = taoVal * STATE.taoUsd;
+  if (usd >= 1e9) return '$' + (usd / 1e9).toFixed(2) + 'B';
+  if (usd >= 1e6) return '$' + (usd / 1e6).toFixed(2) + 'M';
+  if (usd >= 1e3) return '$' + (usd / 1e3).toFixed(1) + 'K';
+  return '$' + usd.toFixed(0);
+}
+function fmtMoneyTAO(v) {
+  if (v >= 1e6) return (v / 1e6).toFixed(2) + 'Mτ';
+  if (v >= 1e3) return (v / 1e3).toFixed(1) + 'Kτ';
+  return v.toFixed(0) + 'τ';
+}
+function fmtMoney(v) {
+  return STATE.currency === 'USD' ? fmtMoneyUSD(v) : fmtMoneyTAO(v);
+}
+
 function fmtPct(v) {
-  return (v >= 0 ? '+' : '') + v.toFixed(2) + '%';
-}
-function fmtPriceCompact(pTao) {
-  if (STATE.currency === 'USD') {
-    const usd = pTao * TAO_USD;
-    if (usd >= 1000) return '$' + (usd/1000).toFixed(1) + 'K';
-    if (usd >= 1) return '$' + usd.toFixed(2);
-    if (usd >= 0.01) return '$' + usd.toFixed(3);
-    return '$' + usd.toFixed(4);
-  } else {
-    if (pTao >= 1) return pTao.toFixed(2) + 'τ';
-    if (pTao >= 0.01) return pTao.toFixed(3) + 'τ';
-    return pTao.toFixed(4) + 'τ';
-  }
-}
-function fmtMoneyCompact(vTao) {
-  if (STATE.currency === 'USD') {
-    const usd = vTao * TAO_USD;
-    if (usd >= 1e9) return '$' + (usd/1e9).toFixed(1) + 'B';
-    if (usd >= 1e6) return '$' + (usd/1e6).toFixed(1) + 'M';
-    if (usd >= 1e3) return '$' + (usd/1e3).toFixed(0) + 'K';
-    return '$' + usd.toFixed(0);
-  } else {
-    if (vTao >= 1e6) return (vTao/1e6).toFixed(1) + 'Mτ';
-    if (vTao >= 1e3) return (vTao/1e3).toFixed(0) + 'Kτ';
-    return vTao.toFixed(0) + 'τ';
-  }
+  if (v === 0 || v === null || v === undefined || isNaN(v)) return '0.00%';
+  const sign = v >= 0 ? '+' : '';
+  return sign + v.toFixed(2) + '%';
 }
 
-function changeKey() {
-  return 'change' + (STATE.timeframe === '1h' ? '1h' : STATE.timeframe === '24h' ? '24h' : STATE.timeframe === '7d' ? '7d' : '30d');
-}
-
-function bubbleDisplayText(d) {
-  const ck = changeKey();
-  switch (STATE.displayMetric) {
-    case 'change':    return fmtPct(d[ck]);
-    case 'price':     return fmtPriceCompact(d.price);
-    case 'marketCap': return fmtMoneyCompact(d.marketCap);
-    case 'volume':    return fmtMoneyCompact(d.volume);
-    default: return fmtPct(d[ck]);
-  }
+function pctClass(v) {
+  if (!v || isNaN(v)) return 'zero';
+  if (Math.abs(v) < 0.01) return 'zero';
+  return v >= 0 ? 'pos' : 'neg';
 }
 
 /* =========================================================================
-   COLOR & SIZE SCALES
+   MAPEO TAOSTATS → MODELO INTERNO
    ========================================================================= */
-function colorForChange(change) {
-  const clamped = Math.max(-15, Math.min(15, change));
-  const t = (clamped + 15) / 30;
-  let r, g, b;
-  if (t < 0.5) {
-    const u = t * 2;
-    r = 255 * (1 - u * 0.8);
-    g = 77 * (1 - u) + 45 * u;
-    b = 94 * (1 - u) + 53 * u;
+function mapSubnet(raw) {
+  const id = raw.netuid;
+  const def = SUBNET_DEFS[id];
+
+  // Símbolo: priorizar nuestro diccionario sobre símbolos unicode raros (ش, ת...)
+  let symbol;
+  if (def && def.symbol) {
+    symbol = def.symbol;
+  } else if (raw.symbol && /^[A-Za-z0-9]{2,8}$/.test(raw.symbol.trim())) {
+    symbol = raw.symbol.trim().toUpperCase();
   } else {
-    const u = (t - 0.5) * 2;
-    r = 34;
-    g = 45 + (216 - 45) * u;
-    b = 53 + (122 - 53) * u;
+    symbol = `SN${id}`;
   }
-  const intensity = Math.abs(clamped) / 15;
+
+  // Nombre
+  let name;
+  if (raw.name && raw.name !== 'Unknown' && raw.name.trim()) {
+    name = raw.name.trim();
+  } else if (def && def.name) {
+    name = def.name;
+  } else {
+    name = `Subnet ${id}`;
+  }
+
   return {
-    fill: `rgb(${r|0}, ${g|0}, ${b|0})`,
-    glow: `rgba(${r|0}, ${g|0}, ${b|0}, ${0.35 + intensity * 0.35})`,
-  };
-}
-
-function buildSizeScale(data, metric, width, height) {
-  const values = data.map(d => d[metric]);
-  const area = width * height;
-  const totalTarget = area * 0.55;
-  const sum = d3.sum(values);
-  const scaleFactor = totalTarget / sum;
-  return (v) => {
-    const a = v * scaleFactor;
-    const r = Math.sqrt(a / Math.PI);
-    return Math.max(14, Math.min(r, Math.min(width, height) * 0.18));
+    id,
+    symbol,
+    name,
+    price: parseFloat(raw.price) || 0,
+    marketCap: (parseFloat(raw.market_cap) || 0) / RAO,
+    volume: (parseFloat(raw.tao_volume_24_hr) || 0) / RAO,
+    change24h: parseFloat(raw.price_change_1_day) || 0,
   };
 }
 
 /* =========================================================================
-   D3 RENDER
+   RENDERIZADO
    ========================================================================= */
-const svg = d3.select('#bubbles');
-const tooltip = document.getElementById('tooltip');
-let simulation, gRoot;
+function renderHeader() {
+  const priceEl = document.getElementById('tao-price');
+  const changeEl = document.getElementById('tao-change');
 
-function initSim() {
-  svg.selectAll('*').remove();
-
-  const defs = svg.append('defs');
-  const filter = defs.append('filter')
-    .attr('id', 'bubble-glow')
-    .attr('x', '-50%').attr('y', '-50%')
-    .attr('width', '200%').attr('height', '200%');
-  filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'blur');
-  const merge = filter.append('feMerge');
-  merge.append('feMergeNode').attr('in', 'blur');
-  merge.append('feMergeNode').attr('in', 'SourceGraphic');
-
-  const grad = defs.append('radialGradient')
-    .attr('id', 'sheen')
-    .attr('cx', '30%').attr('cy', '30%').attr('r', '70%');
-  grad.append('stop').attr('offset', '0%').attr('stop-color', 'white').attr('stop-opacity', 0.25);
-  grad.append('stop').attr('offset', '60%').attr('stop-color', 'white').attr('stop-opacity', 0.03);
-  grad.append('stop').attr('offset', '100%').attr('stop-color', 'white').attr('stop-opacity', 0);
-
-  gRoot = svg.append('g');
-  render();
-}
-
-function getFilteredData() {
-  const q = STATE.search.trim().toLowerCase();
-  if (!q) return STATE.data;
-  return STATE.data.filter(d =>
-    d.symbol.toLowerCase().includes(q) ||
-    d.name.toLowerCase().includes(q) ||
-    String(d.id) === q ||
-    d.owner.toLowerCase().includes(q)
-  );
-}
-
-function render() {
-  const w = svg.node().clientWidth;
-  const h = svg.node().clientHeight;
-  const data = getFilteredData();
-  const ck = changeKey();
-
-  data.forEach(d => {
-    d.color = colorForChange(d[ck]);
-  });
-
-  // Si hay búsqueda activa o ALL, mostrar todos sin agrupar
-  const isSearching = STATE.search.trim().length > 0;
-  const showAll = STATE.topN === 'all';
-  const TOP_N = typeof STATE.topN === 'number' ? STATE.topN : 20;
-
-  let displayItems;
-  let othersData = null;
-
-  if (isSearching || showAll || data.length <= TOP_N) {
-    // Mostrar todos
-    displayItems = data.map(d => ({ ...d, _isOthers: false }));
-  } else {
-    // Top N por market cap + agrupar el resto
-    const sorted = [...data].sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0));
-    const top = sorted.slice(0, TOP_N);
-    const rest = sorted.slice(TOP_N);
-
-    const restMcap = d3.sum(rest, d => d.marketCap);
-    const restVolume = d3.sum(rest, d => d.volume);
-    const avgChange = rest.reduce((acc, d) => acc + (d[ck] || 0), 0) / rest.length;
-
-    othersData = {
-      _isOthers: true,
-      id: 'others',
-      symbol: 'OTHERS',
-      name: `Subnets ${TOP_N + 1}–${sorted.length}`,
-      owner: '—',
-      marketCap: restMcap,
-      volume: restVolume,
-      price: 0,
-      change1h: 0, change24h: 0, change7d: 0, change30d: 0,
-      [ck]: avgChange,  // valor del cambio promedio para el rango activo
-      _restItems: rest,
-      _restCount: rest.length,
-      color: colorForChange(avgChange),
-    };
-
-    displayItems = [...top.map(d => ({ ...d, _isOthers: false })), othersData];
+  if (STATE.taoUsd > 0) {
+    priceEl.textContent = STATE.currency === 'USD'
+      ? '$' + STATE.taoUsd.toFixed(2)
+      : '1.00 τ';
+    changeEl.textContent = fmtPct(STATE.taoChange);
+    changeEl.className = 'tao-change ' + pctClass(STATE.taoChange);
   }
-
-  const root = d3.hierarchy({ children: displayItems })
-    .sum(d => Math.max(d.marketCap || 0, 0.0001))
-    .sort((a, b) => b.value - a.value);
-
-  d3.treemap()
-    .size([w, h])
-    .paddingInner(3)
-    .paddingOuter(0)
-    .round(true)
-    (root);
-
-  if (simulation) { simulation.stop(); simulation = null; }
-
-  const groups = gRoot.selectAll('g.tile-group')
-    .data(root.leaves(), d => d.data.id);
-
-  groups.exit().remove();
-
-  const enter = groups.enter()
-    .append('g')
-    .attr('class', 'tile-group')
-    .style('cursor', 'pointer')
-    .on('mouseenter', (e, d) => {
-      if (d.data._isOthers) onHoverOthers(e, d.data);
-      else onHover(e, d.data);
-    })
-    .on('mousemove', (e, d) => onMove(e, d.data))
-    .on('mouseleave', onLeave)
-    .on('click', (e, d) => {
-      if (d.data._isOthers) openOthersPanel(d.data);
-      else onClick(e, d.data);
-    });
-
-  enter.append('rect').attr('class', 'tile-rect');
-  enter.append('text').attr('class', 'tile-text tile-symbol');
-  enter.append('text').attr('class', 'tile-text tile-value');
-  enter.append('text').attr('class', 'tile-text tile-id');
-  enter.append('text').attr('class', 'tile-text tile-extra');  // 3ª línea (precio en grandes)
-
-  const all = enter.merge(groups);
-
-  all.attr('transform', d => `translate(${d.x0},${d.y0})`);
-
-  // Estilo especial para "Others": bordes punteados, fondo más sutil
-  all.select('.tile-rect')
-    .attr('width', d => Math.max(0, d.x1 - d.x0))
-    .attr('height', d => Math.max(0, d.y1 - d.y0))
-    .attr('fill', d => d.data._isOthers ? 'rgba(0, 240, 255, 0.04)' : d.data.color.fill)
-    .attr('fill-opacity', d => d.data._isOthers ? 1 : 0.22)
-    .attr('stroke', d => d.data._isOthers ? 'rgba(0, 240, 255, 0.5)' : d.data.color.fill)
-    .attr('stroke-opacity', d => d.data._isOthers ? 1 : 0.8)
-    .attr('stroke-width', d => d.data._isOthers ? 1.2 : 1)
-    .attr('stroke-dasharray', d => d.data._isOthers ? '4,3' : null)
-    .attr('rx', 4)
-    .attr('ry', 4);
-
-  all.each(function(d) {
-    const g = d3.select(this);
-    const tw = d.x1 - d.x0;
-    const th = d.y1 - d.y0;
-    const cx = tw / 2;
-    const cy = th / 2;
-    const minSide = Math.min(tw, th);
-
-    // Caso especial: tile "Others"
-    if (d.data._isOthers) {
-      const symSize = Math.max(10, Math.min(minSide * 0.18, 22));
-      const countSize = Math.max(8, Math.min(minSide * 0.32, 38));
-      const valSize = Math.max(8, Math.min(minSide * 0.10, 12));
-
-      g.select('.tile-symbol')
-        .attr('x', cx)
-        .attr('y', cy - countSize * 0.5)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .attr('font-size', symSize)
-        .attr('fill', 'rgba(0, 240, 255, 0.7)')
-        .attr('fill-opacity', 1)
-        .attr('letter-spacing', '0.08em')
-        .text('OTHERS');
-
-      g.select('.tile-value')
-        .attr('x', cx)
-        .attr('y', cy + symSize * 0.3)
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .attr('font-size', countSize)
-        .attr('fill', '#f4faff')
-        .attr('fill-opacity', 1)
-        .text(`+${d.data._restCount}`);
-
-      g.select('.tile-id')
-        .attr('x', cx)
-        .attr('y', cy + countSize * 0.95)
-        .attr('text-anchor', 'middle')
-        .attr('font-size', valSize)
-        .attr('fill', 'rgba(255, 255, 255, 0.45)')
-        .attr('fill-opacity', minSide > 80 ? 1 : 0)
-        .text(minSide > 80 ? `↗ ver lista` : '');
-
-      g.select('.tile-extra')
-        .attr('fill-opacity', 0)
-        .text('');
-
-      return;
-    }
-
-    // Tile normal: niveles progresivos de detalle
-    // Niveles: tiny (<40), small (40-80), medium (80-130), large (>130)
-    const isLarge = minSide > 130;
-    const isMedium = minSide > 80 && minSide <= 130;
-    const isSmall = minSide > 40 && minSide <= 80;
-
-    const symSize = isLarge ? 28 : isMedium ? 20 : isSmall ? 14 : Math.max(8, minSide * 0.28);
-    const valSize = isLarge ? 16 : isMedium ? 13 : isSmall ? 11 : 0;
-    const extraSize = isLarge ? 12 : 0;
-    const idSize = (isLarge || isMedium) ? 10 : 0;
-
-    g.select('.tile-symbol')
-      .attr('x', cx)
-      .attr('y', () => {
-        if (isLarge) return cy - symSize * 0.5;
-        if (isMedium) return cy - symSize * 0.35;
-        return cy - 2;
-      })
-      .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'middle')
-      .attr('font-size', symSize)
-      .attr('fill', '#fff')
-      .attr('fill-opacity', minSide > 25 ? 1 : 0)
-      .text(() => {
-        if (minSide < 25) return '';
-        if (minSide < 50 && d.data.symbol.length > 5) return d.data.symbol.slice(0, 4);
-        return d.data.symbol;
-      });
-
-    g.select('.tile-value')
-      .attr('x', cx)
-      .attr('y', () => {
-        if (isLarge) return cy + symSize * 0.45;
-        if (isMedium) return cy + symSize * 0.6;
-        return cy + symSize * 0.8;
-      })
-      .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'middle')
-      .attr('font-size', valSize)
-      .attr('fill', d.data[ck] >= 0 ? '#b7f5d1' : '#ffc4cb')
-      .attr('fill-opacity', isSmall || isMedium || isLarge ? 0.95 : 0)
-      .text(() => (isSmall || isMedium || isLarge) ? bubbleDisplayText(d.data) : '');
-
-    // Tile grande: añadir precio o market cap como tercera línea
-    g.select('.tile-extra')
-      .attr('x', cx)
-      .attr('y', cy + symSize * 1.1)
-      .attr('text-anchor', 'middle')
-      .attr('dominant-baseline', 'middle')
-      .attr('font-size', extraSize)
-      .attr('fill', 'rgba(255, 255, 255, 0.55)')
-      .attr('fill-opacity', isLarge ? 1 : 0)
-      .text(() => isLarge ? fmtPriceCompact(d.data.price) : '');
-
-    g.select('.tile-id')
-      .attr('x', 6)
-      .attr('y', idSize + 4)
-      .attr('text-anchor', 'start')
-      .attr('font-size', idSize)
-      .attr('fill', '#fff')
-      .attr('fill-opacity', (isLarge || isMedium) ? 0.5 : 0)
-      .text(() => (isLarge || isMedium) ? `SN${d.data.id}` : '');
-  });
-
-  document.getElementById('subnet-count').textContent = data.length;
-  const totalMcap = d3.sum(data, d => d.marketCap);
-  document.getElementById('total-mcap').textContent = fmtMoney(totalMcap);
 }
 
-/* =========================================================================
-   LIST VIEW
-   ========================================================================= */
-function sparklineSVG(subnet, range) {
-  const W = 140, H = 36;
-  const daysByRange = { '24h': 1, '7d': 7 };
-  const days = daysByRange[range] || 7;
+function renderStats(filteredData) {
+  document.getElementById('stat-count').textContent = filteredData.length;
 
-  // Sin datos reales → mostrar placeholder
-  if (!subnet.sparkline || subnet.sparkline.length < 2) {
-    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-      <line x1="3" y1="${H/2}" x2="${W-3}" y2="${H/2}"
-        stroke="rgba(138,149,168,0.25)" stroke-width="1"
-        stroke-dasharray="2,3" vector-effect="non-scaling-stroke"/>
-      <text x="${W/2}" y="${H/2 + 4}" text-anchor="middle"
-        fill="rgba(138,149,168,0.5)" font-size="9"
-        font-family="Share Tech Mono, monospace">no data</text>
-    </svg>`;
-  }
+  const totalMcap = filteredData.reduce((s, d) => s + d.marketCap, 0);
+  const totalVol = filteredData.reduce((s, d) => s + d.volume, 0);
 
-  const nowSec = Math.floor(Date.now() / 1000);
-  const cutoff = nowSec - days * 86400;
-  let history = subnet.sparkline.filter(p => p.time >= cutoff);
-  if (history.length < 2) history = subnet.sparkline.slice(-Math.max(6, history.length));
-  if (history.length < 2) {
-    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-      <text x="${W/2}" y="${H/2 + 4}" text-anchor="middle"
-        fill="rgba(138,149,168,0.5)" font-size="9"
-        font-family="Share Tech Mono, monospace">no data</text>
-    </svg>`;
-  }
-
-  const values = history.map(d => d.value);
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const rangeV = (max - min) || 1;
-  const pad = 3;
-  const innerH = H - pad * 2;
-
-  let d = '';
-  values.forEach((v, i) => {
-    const x = (i / (values.length - 1)) * W;
-    const y = H - pad - ((v - min) / rangeV) * innerH;
-    d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
-  });
-
-  const first = values[0];
-  const last = values[values.length - 1];
-  const isUp = last >= first;
-  const color = isUp ? '#22d87a' : '#ff4d5e';
-  const fillColor = isUp ? 'rgba(34,216,122,0.14)' : 'rgba(255,77,94,0.14)';
-  const areaD = d + ` L${W},${H} L0,${H} Z`;
-
-  const lastX = W;
-  const lastY = H - pad - ((last - min) / rangeV) * innerH;
-
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
-    <path d="${areaD}" fill="${fillColor}" stroke="none"/>
-    <path d="${d}" fill="none" stroke="${color}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-    <circle cx="${lastX - 1.5}" cy="${lastY.toFixed(1)}" r="2" fill="${color}"/>
-  </svg>`;
-}
-
-function sortData(data) {
-  const key = STATE.sortBy;
-  const sign = STATE.sortDir === 'desc' ? -1 : 1;
-  return [...data].sort((a, b) => {
-    const va = a[key], vb = b[key];
-    if (typeof va === 'string') return va.localeCompare(vb) * sign;
-    return ((va || 0) - (vb || 0)) * sign;
-  });
+  document.getElementById('stat-mcap').textContent = fmtMoney(totalMcap);
+  document.getElementById('stat-vol').textContent = fmtMoney(totalVol);
 }
 
 function renderList() {
-  const data = getFilteredData();
-  const sorted = sortData(data);
-  const body = document.getElementById('list-body');
+  const listEl = document.getElementById('list');
 
-  document.getElementById('list-count').textContent = sorted.length + (sorted.length === 1 ? ' subnet' : ' subnets');
+  // Filtrar por búsqueda
+  const q = STATE.search.trim().toLowerCase();
+  let filtered = STATE.data;
+  if (q) {
+    filtered = STATE.data.filter(d =>
+      d.symbol.toLowerCase().includes(q) ||
+      d.name.toLowerCase().includes(q) ||
+      String(d.id) === q
+    );
+  }
 
-  const rowClass = v => v >= 0 ? 'pos' : 'neg';
+  // Ordenar por market cap descendente
+  filtered = [...filtered].sort((a, b) => b.marketCap - a.marketCap);
 
-  body.innerHTML = sorted.map((d, idx) => `
+  renderStats(filtered);
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = '<div class="empty-state">Sin resultados</div>';
+    return;
+  }
+
+  // Construir HTML
+  const html = filtered.map((d, i) => `
     <div class="list-row" data-id="${d.id}">
-      <div class="col-rank list-rank">${idx + 1}</div>
-      <div class="col-subnet list-subnet">
-        <div class="list-symbol">${d.symbol}</div>
-        <div class="list-meta">SN${d.id} · ${d.name}</div>
+      <div class="rank">${i + 1}</div>
+      <div class="subnet-info">
+        <span class="subnet-symbol">${escapeHtml(d.symbol)}</span>
+        <span class="subnet-meta">SN${d.id} · ${escapeHtml(d.name)}</span>
       </div>
-      <div class="col-price list-val">${fmtPrice(d.price)}</div>
-      <div class="col-1h list-val ${rowClass(d.change1h)}">${fmtPct(d.change1h)}</div>
-      <div class="col-24h list-val ${rowClass(d.change24h)}">${fmtPct(d.change24h)}</div>
-      <div class="col-7d list-val ${rowClass(d.change7d)}">${fmtPct(d.change7d)}</div>
-      <div class="col-mcap list-val">${fmtMoney(d.marketCap)}</div>
-      <div class="col-vol list-val">${fmtMoney(d.volume)}</div>
-      <div class="col-spark list-spark">${sparklineSVG(d, STATE.sparklineRange)}</div>
+      <div class="price">${fmtPrice(d.price)}</div>
+      <div class="change ${pctClass(d.change24h)}">${fmtPct(d.change24h)}</div>
     </div>
   `).join('');
 
-  body.querySelectorAll('.list-row').forEach(row => {
-    row.addEventListener('click', () => {
-      const id = parseInt(row.dataset.id, 10);
-      const subnet = STATE.data.find(s => s.id === id);
-      if (subnet) openPanel(subnet);
-    });
-  });
-
-  document.getElementById('subnet-count').textContent = data.length;
-  const totalMcap = d3.sum(data, d => d.marketCap);
-  document.getElementById('total-mcap').textContent = fmtMoney(totalMcap);
+  listEl.innerHTML = html;
 }
 
-function refresh() {
-  if (STATE.view === 'bubbles') render();
-  else renderList();
-}
-
-function updateView() {
-  const isBubbles = STATE.view === 'bubbles';
-  document.querySelector('.canvas-wrap').style.display = isBubbles ? '' : 'none';
-  document.getElementById('list-view').style.display = isBubbles ? 'none' : '';
-  document.querySelector('.controls').style.display = isBubbles ? '' : 'none';
-  refresh();
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 /* =========================================================================
-   TOOLTIP
+   FETCH DEL PROXY
    ========================================================================= */
-function onHover(event, d) {
-  tooltip.classList.add('visible');
-  const ck = changeKey();
-  document.getElementById('tt-symbol').textContent = d.symbol;
-  document.getElementById('tt-id').textContent = `SN ${d.id}`;
-  document.getElementById('tt-name').textContent = d.name;
-  document.getElementById('tt-price').textContent = fmtPrice(d.price);
-  const ch = d[ck];
-  const chEl = document.getElementById('tt-change');
-  chEl.textContent = fmtPct(ch);
-  chEl.style.color = ch >= 0 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('tt-mcap').textContent = fmtMoney(d.marketCap);
-  document.getElementById('tt-vol').textContent = fmtMoney(d.volume);
-  onMove(event);
-}
-
-function onHoverOthers(event, d) {
-  tooltip.classList.add('visible');
-  const ck = changeKey();
-  document.getElementById('tt-symbol').textContent = 'OTHERS';
-  document.getElementById('tt-id').textContent = `+${d._restCount}`;
-  document.getElementById('tt-name').textContent = d.name;
-  document.getElementById('tt-price').textContent = '—';
-  const chEl = document.getElementById('tt-change');
-  chEl.textContent = fmtPct(d[ck]) + ' avg';
-  chEl.style.color = d[ck] >= 0 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('tt-mcap').textContent = fmtMoney(d.marketCap);
-  document.getElementById('tt-vol').textContent = fmtMoney(d.volume);
-  onMove(event);
-}
-
-function onMove(event) {
-  tooltip.style.left = event.clientX + 'px';
-  tooltip.style.top = event.clientY + 'px';
-}
-function onLeave() {
-  tooltip.classList.remove('visible');
-}
-
-/* Panel especial para "Others" — muestra la lista de subnets agrupadas */
-function openOthersPanel(d) {
-  STATE.selected = null;  // no es una subnet individual
-  tooltip.classList.remove('visible');
-
-  const panel = document.getElementById('side-panel');
-  const backdrop = document.getElementById('backdrop');
-
-  // Reemplazar contenido del panel con vista "Others"
-  const ck = changeKey();
-  const sortedRest = [...d._restItems].sort((a, b) => (b.marketCap || 0) - (a.marketCap || 0));
-
-  panel.innerHTML = `
-    <div class="panel-header">
-      <div>
-        <div class="panel-id">GROUP · ${d._restCount} SUBNETS</div>
-        <div class="panel-symbol">OTHERS</div>
-        <div class="panel-name">${d.name}</div>
-      </div>
-      <button class="panel-close" id="others-close" title="Cerrar (Esc)">×</button>
-    </div>
-
-    <div class="panel-price-row">
-      <div class="panel-price">${fmtMoney(d.marketCap)}</div>
-      <div class="panel-change ${d[ck] >= 0 ? 'pos' : 'neg'}">${fmtPct(d[ck])} avg · ${STATE.timeframe.toUpperCase()}</div>
-    </div>
-
-    <div class="panel-chart-section">
-      <div class="panel-chart-title"><span>Subnets in this group</span></div>
-      <div id="others-list" style="max-height: calc(100vh - 280px); overflow-y: auto; margin: 0 -24px; padding: 0 24px;"></div>
-    </div>
-  `;
-
-  panel.classList.add('open');
-  backdrop.classList.add('visible');
-
-  // Renderizar lista de subnets en formato compacto
-  const listEl = document.getElementById('others-list');
-  listEl.innerHTML = sortedRest.map(s => {
-    const ch = s[ck] || 0;
-    const chColor = ch >= 0 ? 'var(--green)' : 'var(--red)';
-    return `
-      <div class="others-row" data-id="${s.id}" style="
-        display: grid;
-        grid-template-columns: 40px 1fr auto auto;
-        gap: 12px;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid var(--border);
-        cursor: pointer;
-        transition: background 0.15s;
-      ">
-        <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-faint); letter-spacing: 0.1em;">SN${s.id}</div>
-        <div>
-          <div style="font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: 0.02em;">${s.symbol}</div>
-          <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">${s.name}</div>
-        </div>
-        <div style="font-family: var(--font-mono); font-size: 12px; text-align: right;">${fmtMoney(s.marketCap)}</div>
-        <div style="font-family: var(--font-mono); font-size: 12px; text-align: right; color: ${chColor}; min-width: 60px;">${fmtPct(ch)}</div>
-      </div>
-    `;
-  }).join('');
-
-  // Hover effect via JS porque son inline styles
-  listEl.querySelectorAll('.others-row').forEach(row => {
-    row.addEventListener('mouseenter', () => row.style.background = 'rgba(0, 240, 255, 0.04)');
-    row.addEventListener('mouseleave', () => row.style.background = '');
-    row.addEventListener('click', () => {
-      const id = parseInt(row.dataset.id, 10);
-      const subnet = STATE.data.find(s => s.id === id);
-      if (subnet) {
-        // Restaurar el panel original primero
-        restorePanelHTML();
-        openPanel(subnet);
-      }
-    });
-  });
-
-  document.getElementById('others-close').addEventListener('click', () => {
-    closePanel();
-    restorePanelHTML();
-  });
-}
-
-// Guardar el HTML original del panel para poder restaurarlo
-const ORIGINAL_PANEL_HTML = document.getElementById('side-panel').innerHTML;
-function restorePanelHTML() {
-  const panel = document.getElementById('side-panel');
-  panel.innerHTML = ORIGINAL_PANEL_HTML;
-  // Re-bind close button
-  document.getElementById('panel-close').addEventListener('click', closePanel);
-  document.getElementById('panel-chart-controls').addEventListener('click', e => {
-    const btn = e.target.closest('button');
-    if (!btn) return;
-    document.querySelectorAll('#panel-chart-controls button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    STATE.chartRange = btn.dataset.range;
-    if (STATE.selected) renderChart(STATE.selected);
-  });
-}
-
-/* =========================================================================
-   SIDE PANEL
-   ========================================================================= */
-function onClick(event, d) {
-  openPanel(d);
-}
-
-function openPanel(d) {
-  STATE.selected = d;
-  document.getElementById('side-panel').classList.add('open');
-  document.getElementById('backdrop').classList.add('visible');
-  tooltip.classList.remove('visible');
-  populatePanel(d);
-}
-
-function closePanel() {
-  document.getElementById('side-panel').classList.remove('open');
-  document.getElementById('backdrop').classList.remove('visible');
-  STATE.selected = null;
-  if (STATE.chart) {
-    STATE.chart.remove();
-    STATE.chart = null;
-    STATE.series = null;
-  }
-  // Restaurar HTML original del panel después de la animación de cierre
-  setTimeout(() => {
-    const panel = document.getElementById('side-panel');
-    if (!panel.classList.contains('open')) {
-      restorePanelHTML();
-    }
-  }, 400);
-}
-
-function populatePanel(d) {
-  const ck = changeKey();
-  document.getElementById('panel-id').textContent = 'SN ' + d.id;
-  document.getElementById('panel-symbol').textContent = d.symbol;
-  document.getElementById('panel-name').textContent = d.name;
-  document.getElementById('panel-price').textContent = fmtPrice(d.price);
-
-  const chEl = document.getElementById('panel-change');
-  chEl.textContent = fmtPct(d[ck]) + '  ·  ' + STATE.timeframe.toUpperCase();
-  chEl.className = 'panel-change ' + (d[ck] >= 0 ? 'pos' : 'neg');
-
-  document.getElementById('panel-mcap').textContent = fmtMoney(d.marketCap);
-  document.getElementById('panel-vol').textContent = fmtMoney(d.volume);
-  document.getElementById('panel-emit').textContent = fmtMoney(d.emissions);
-  document.getElementById('panel-owner').textContent = d.owner;
-
-  const ch1 = document.getElementById('panel-1h');
-  ch1.textContent = fmtPct(d.change1h);
-  ch1.style.color = d.change1h >= 0 ? 'var(--green)' : 'var(--red)';
-  const ch30 = document.getElementById('panel-30d');
-  ch30.textContent = fmtPct(d.change30d);
-  ch30.style.color = d.change30d >= 0 ? 'var(--green)' : 'var(--red)';
-
-  document.getElementById('panel-link').href = `https://taostats.io/subnets/${d.id}`;
-  renderChart(d);
-}
-
-function renderChart(subnet) {
-  const container = document.getElementById('panel-chart');
-
-  if (STATE.chart) {
-    try { STATE.chart.remove(); } catch(e) {}
-    STATE.chart = null;
-    STATE.series = null;
-  }
-  container.innerHTML = '';
-
-  const daysByRange = { '24h': 1, '7d': 7 };
-  const days = daysByRange[STATE.chartRange] || 7;
-
-  // Verificar que hay datos reales
-  if (!subnet.sparkline || subnet.sparkline.length < 2) {
-    container.innerHTML = `
-      <div style="
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        color: var(--text-faint);
-        font-family: var(--font-mono);
-        font-size: 12px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      ">
-        <div style="opacity:0.5;font-size:24px;">⏚</div>
-        <div>No historical data</div>
-      </div>`;
-    return;
-  }
-
-  const nowSec = Math.floor(Date.now() / 1000);
-  const cutoff = nowSec - days * 86400;
-  let history = subnet.sparkline.filter(p => p.time >= cutoff);
-  if (history.length < 2) history = subnet.sparkline.slice(-Math.max(6, history.length));
-
-  if (history.length < 2) {
-    container.innerHTML = `
-      <div style="
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        color: var(--text-faint);
-        font-family: var(--font-mono);
-        font-size: 12px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      ">
-        <div style="opacity:0.5;font-size:24px;">⏚</div>
-        <div>No data for this range</div>
-      </div>`;
-    return;
-  }
-
-  // Asegurar que el último punto refleja el precio actual
-  history = history.map(p => ({ time: p.time, value: p.value }));
-  history[history.length - 1] = {
-    time: history[history.length - 1].time,
-    value: subnet.price,
-  };
-
-  STATE.chart = LightweightCharts.createChart(container, {
-    width: container.clientWidth,
-    height: 260,
-    layout: {
-      background: { type: 'solid', color: 'transparent' },
-      textColor: '#8a95a8',
-      fontFamily: 'Share Tech Mono, ui-monospace, monospace',
-      fontSize: 11,
-    },
-    grid: {
-      vertLines: { color: 'rgba(0, 240, 255, 0.04)' },
-      horzLines: { color: 'rgba(0, 240, 255, 0.04)' },
-    },
-    timeScale: {
-      borderColor: 'rgba(0, 240, 255, 0.1)',
-      timeVisible: true,
-      secondsVisible: false,
-    },
-    rightPriceScale: {
-      borderColor: 'rgba(0, 240, 255, 0.1)',
-    },
-    crosshair: {
-      mode: LightweightCharts.CrosshairMode.Magnet,
-      vertLine: { color: 'rgba(0, 240, 255, 0.4)', width: 1, style: 3, labelBackgroundColor: '#141826' },
-      horzLine: { color: 'rgba(0, 240, 255, 0.4)', width: 1, style: 3, labelBackgroundColor: '#141826' },
-    },
-  });
-
-  const isUSD = STATE.currency === 'USD';
-  const changeByRange = {
-    '24h': subnet.change24h,
-    '7d':  subnet.change7d,
-  };
-  const rangeChange = changeByRange[STATE.chartRange] ?? subnet.change7d;
-  const isPositive = rangeChange >= 0;
-  const lineColor = isPositive ? '#22d87a' : '#ff4d5e';
-  const topColor = isPositive ? 'rgba(34,216,122,0.35)' : 'rgba(255,77,94,0.35)';
-  const bottomColor = isPositive ? 'rgba(34,216,122,0.0)' : 'rgba(255,77,94,0.0)';
-
-  STATE.series = STATE.chart.addAreaSeries({
-    lineColor,
-    topColor,
-    bottomColor,
-    lineWidth: 2,
-    priceFormat: {
-      type: 'custom',
-      minMove: isUSD ? 0.0001 : 0.00001,
-      formatter: p => {
-        if (isUSD) {
-          const u = p * TAO_USD;
-          if (u < 0.01) return '$' + u.toFixed(5);
-          if (u < 1) return '$' + u.toFixed(3);
-          return '$' + u.toFixed(2);
-        } else {
-          if (p < 0.001) return p.toExponential(2) + ' τ';
-          if (p < 1) return p.toFixed(4) + ' τ';
-          return p.toFixed(3) + ' τ';
-        }
-      },
-    },
-  });
-
-  STATE.series.setData(history);
-  STATE.chart.timeScale().fitContent();
-}
-
-document.getElementById('panel-chart-controls').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  document.querySelectorAll('#panel-chart-controls button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  STATE.chartRange = btn.dataset.range;
-  if (STATE.selected) renderChart(STATE.selected);
-});
-
-document.getElementById('panel-close').addEventListener('click', closePanel);
-document.getElementById('backdrop').addEventListener('click', closePanel);
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && STATE.selected) closePanel();
-});
-
-/* =========================================================================
-   CONTROLS
-   ========================================================================= */
-document.getElementById('timeframe-seg').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  document.querySelectorAll('#timeframe-seg button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  STATE.timeframe = btn.dataset.tf;
-  refresh();
-  if (STATE.selected) populatePanel(STATE.selected);
-});
-
-document.getElementById('show-seg').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  document.querySelectorAll('#show-seg button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  STATE.displayMetric = btn.dataset.show;
-  refresh();
-});
-
-document.getElementById('topn-seg').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  document.querySelectorAll('#topn-seg button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const val = btn.dataset.topn;
-  STATE.topN = val === 'all' ? 'all' : parseInt(val, 10);
-  refresh();
-});
-
-document.getElementById('search').addEventListener('input', e => {
-  STATE.search = e.target.value;
-  refresh();
-});
-
-document.getElementById('currency-seg').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  document.querySelectorAll('#currency-seg button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  STATE.currency = btn.dataset.cur;
-  updateTicker();
-  refresh();
-  if (STATE.selected) populatePanel(STATE.selected);
-});
-
-document.getElementById('view-seg').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  document.querySelectorAll('#view-seg button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  STATE.view = btn.dataset.view;
-  updateView();
-});
-
-document.getElementById('sparkline-seg').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  document.querySelectorAll('#sparkline-seg button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  STATE.sparklineRange = btn.dataset.range;
-  if (STATE.view === 'list') renderList();
-});
-
-document.getElementById('list-header').addEventListener('click', e => {
-  const col = e.target.closest('[data-sort]');
-  if (!col) return;
-  const key = col.dataset.sort;
-  if (STATE.sortBy === key) {
-    STATE.sortDir = STATE.sortDir === 'desc' ? 'asc' : 'desc';
-  } else {
-    STATE.sortBy = key;
-    STATE.sortDir = (key === 'symbol' || key === 'id') ? 'asc' : 'desc';
-  }
-  document.querySelectorAll('#list-header [data-sort]').forEach(h => {
-    h.classList.remove('sorted');
-    const icon = h.querySelector('.sort-icon');
-    if (icon) icon.remove();
-  });
-  col.classList.add('sorted');
-  const iconSpan = document.createElement('span');
-  iconSpan.className = 'sort-icon';
-  iconSpan.textContent = STATE.sortDir === 'desc' ? '↓' : '↑';
-  col.appendChild(iconSpan);
-  renderList();
-});
-
-function updateTicker() {
-  document.getElementById('tao-price').textContent =
-    STATE.currency === 'USD' ? '$' + TAO_USD.toFixed(2) : '1.00 τ';
-  const taoCh = document.getElementById('tao-change');
-  taoCh.textContent = fmtPct(TAO_CHANGE_24H);
-  taoCh.className = 'ticker-value ' + (TAO_CHANGE_24H >= 0 ? 'pos' : 'neg');
-}
-
-/* =========================================================================
-   LIVE WOBBLE
-   ========================================================================= */
-setInterval(() => {
-  STATE.data.forEach(d => {
-    d.change1h  += (Math.random() - 0.5) * 0.3;
-    d.change24h += (Math.random() - 0.5) * 0.15;
-    d.change7d  += (Math.random() - 0.5) * 0.1;
-    d.change30d += (Math.random() - 0.5) * 0.05;
-    d.change1h  = Math.max(-20, Math.min(20, d.change1h));
-    d.change24h = Math.max(-50, Math.min(60, d.change24h));
-    d.change7d  = Math.max(-70, Math.min(90, d.change7d));
-    d.change30d = Math.max(-90, Math.min(200, d.change30d));
-    d.price *= (1 + (Math.random() - 0.5) * 0.002);
-  });
-
-  const ck = changeKey();
-
-  if (STATE.view === 'bubbles') {
-    // Re-render completo para que el agrupamiento Others se recalcule correctamente
-    render();
-  } else {
-    renderList();
-  }
-
-  if (STATE.selected) {
-    const ckSel = changeKey();
-    document.getElementById('panel-price').textContent = fmtPrice(STATE.selected.price);
-    const chEl = document.getElementById('panel-change');
-    chEl.textContent = fmtPct(STATE.selected[ckSel]) + '  ·  ' + STATE.timeframe.toUpperCase();
-    chEl.className = 'panel-change ' + (STATE.selected[ckSel] >= 0 ? 'pos' : 'neg');
-  }
-}, 2500);
-
-/* =========================================================================
-   RESIZE
-   ========================================================================= */
-window.addEventListener('resize', () => {
-  if (simulation) simulation.stop();
-  initSim();
-  if (STATE.chart) {
-    STATE.chart.applyOptions({
-      width: document.getElementById('panel-chart').clientWidth
-    });
-  }
-});
-
-/* =========================================================================
-   BOOT
-   ========================================================================= */
-updateTicker();
-initSim();
-
-/* =========================================================================
-   CONEXIÓN AL PROXY
-   ========================================================================= */
-const SUBNET_LOOKUP = Object.fromEntries(SUBNET_DEFS.map(s => [s.id, s]));
-const RAO = 1_000_000_000;
-
-function mapTaostatsSubnet(raw) {
-  const netuid = raw.netuid;
-  const def = SUBNET_LOOKUP[netuid];
-
-  let name = (raw.name && raw.name !== 'Unknown' && raw.name.trim())
-    ? raw.name
-    : (def ? def.name : `Subnet ${netuid}`);
-
-  let symbol = (raw.symbol && raw.symbol.trim())
-    ? raw.symbol.trim()
-    : (def ? def.symbol : `SN${netuid}`);
-
-  const priceInTao = parseFloat(raw.price) || 0;
-  const marketCapTao = (parseFloat(raw.market_cap) || 0) / RAO;
-  const volumeTao = (parseFloat(raw.tao_volume_24_hr) || 0) / RAO;
-  const emissions = (parseFloat(raw.root_prop) || 0) * 100;
-
-  const sparkline = Array.isArray(raw.seven_day_prices)
-    ? raw.seven_day_prices.map(p => ({
-        time: Math.floor(new Date(p.timestamp).getTime() / 1000),
-        value: parseFloat(p.price) || 0,
-      }))
-    : null;
-
-  return {
-    id: netuid,
-    symbol,
-    name,
-    owner: def ? def.owner : '—',
-    price: priceInTao,
-    marketCap: marketCapTao,
-    volume: volumeTao,
-    emissions,
-    change1h: parseFloat(raw.price_change_1_hour) || 0,
-    change24h: parseFloat(raw.price_change_1_day) || 0,
-    change7d: parseFloat(raw.price_change_1_week) || 0,
-    change30d: parseFloat(raw.price_change_1_month) || 0,
-    rank: raw.rank,
-    sparkline,
-  };
-}
-
-let _lastLoadMs = 0;
-let _isLoading = false;
-
-async function loadFromProxy() {
-  if (!API_BASE) return;
-  if (_isLoading) return;
-
-  _isLoading = true;
+async function loadData() {
   try {
     const [priceRes, p1Res, p2Res] = await Promise.all([
       fetch(`${API_BASE}/api/price/latest/v1?asset=tao`),
@@ -2359,51 +709,75 @@ async function loadFromProxy() {
     ]);
 
     if (!priceRes.ok || !p1Res.ok || !p2Res.ok) {
-      console.warn('[bittensor-pro] respuesta no OK del proxy', {
-        price: priceRes.status, p1: p1Res.status, p2: p2Res.status
-      });
-      return;
+      throw new Error(`HTTP error: ${priceRes.status}/${p1Res.status}/${p2Res.status}`);
     }
 
     const priceJson = await priceRes.json();
     const p1Json = await p1Res.json();
     const p2Json = await p2Res.json();
 
+    // TAO
     if (priceJson?.data?.[0]) {
-      TAO_USD = parseFloat(priceJson.data[0].price) || TAO_USD;
-      TAO_CHANGE_24H = parseFloat(priceJson.data[0].percent_change_24h) || TAO_CHANGE_24H;
+      STATE.taoUsd = parseFloat(priceJson.data[0].price) || 0;
+      STATE.taoChange = parseFloat(priceJson.data[0].percent_change_24h) || 0;
     }
 
-    const rawSubnets = [
-      ...(p1Json?.data || []),
-      ...(p2Json?.data || []),
-    ];
-
-    if (rawSubnets.length === 0) {
-      console.warn('[bittensor-pro] proxy no devolvió subnets');
-      return;
+    // Subnets
+    const raw = [...(p1Json?.data || []), ...(p2Json?.data || [])];
+    if (raw.length === 0) {
+      throw new Error('proxy devolvió 0 subnets');
     }
 
-    const mapped = rawSubnets
+    STATE.data = raw
       .filter(s => s.netuid > 0)
-      .map(mapTaostatsSubnet)
-      .sort((a, b) => b.marketCap - a.marketCap);
+      .map(mapSubnet);
 
-    STATE.data = mapped;
-    _lastLoadMs = Date.now();
+    renderHeader();
+    renderList();
 
-    updateTicker();
-    render();
-    console.log(`[bittensor-pro] ✓ datos reales cargados: ${mapped.length} subnets, TAO=$${TAO_USD.toFixed(2)}`);
+    console.log(`[bittensor-pro] ${STATE.data.length} subnets cargadas, TAO=$${STATE.taoUsd.toFixed(2)}`);
   } catch (err) {
-    console.error('[bittensor-pro] proxy fetch falló, manteniendo datos previos:', err);
-  } finally {
-    _isLoading = false;
+    console.error('[bittensor-pro] error cargando datos:', err);
+    if (STATE.data.length === 0) {
+      document.getElementById('list').innerHTML =
+        '<div class="empty-state">Error cargando datos. Reintentando…</div>';
+    }
   }
 }
 
-loadFromProxy();
-setInterval(loadFromProxy, 60_000);
+/* =========================================================================
+   EVENTOS
+   ========================================================================= */
+document.getElementById('cur-toggle').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  document.querySelectorAll('#cur-toggle button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  STATE.currency = btn.dataset.cur;
+  renderHeader();
+  renderList();
+});
+
+document.getElementById('search').addEventListener('input', e => {
+  STATE.search = e.target.value;
+  renderList();
+});
+
+// Click en una fila → abrir Taostats en otra pestaña
+document.getElementById('list').addEventListener('click', e => {
+  const row = e.target.closest('.list-row');
+  if (!row) return;
+  const id = row.dataset.id;
+  if (id) {
+    window.open(`https://taostats.io/subnets/${id}`, '_blank', 'noopener');
+  }
+});
+
+/* =========================================================================
+   BOOT
+   ========================================================================= */
+loadData();
+setInterval(loadData, 60_000);  // refresh cada minuto
 </script>
 
 </body>
