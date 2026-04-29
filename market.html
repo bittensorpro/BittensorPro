@@ -1469,31 +1469,35 @@ function bubbleDisplayText(d) {
    COLOR & SIZE SCALES
    ========================================================================= */
 function colorForChange(change) {
-  // Rango efectivo: ±10% (en lugar de ±15%) para que cambios pequeños tengan ya color claro
-  const clamped = Math.max(-10, Math.min(10, change));
-  const t = (clamped + 10) / 20;
+  // Rango efectivo más estrecho: ±5% (en lugar de ±10%) para que cambios
+  // pequeños como ±1% ya se vean claramente verde o rojo intensos.
+  const clamped = Math.max(-5, Math.min(5, change));
+  const t = (clamped + 5) / 10;  // 0 = rojo intenso, 0.5 = neutro, 1 = verde intenso
   let r, g, b;
+
   if (t < 0.5) {
-    // Rojo intenso → rojo apagado en el centro
-    const u = t * 2;
-    r = 255 * (1 - u * 0.55);
-    g = 60 * (1 - u) + 70 * u;
-    b = 80 * (1 - u) + 90 * u;
+    // Rojo: de rojo brillante (-5%) a gris-rojizo (cerca de 0)
+    const u = t * 2;  // 0 → 1
+    r = 255 - u * 100;       // 255 → 155
+    g = 70 + u * 50;         // 70 → 120
+    b = 90 + u * 50;         // 90 → 140
   } else {
-    // Verde apagado → verde intenso
-    const u = (t - 0.5) * 2;
-    r = 50 + (40 - 50) * u;
-    g = 70 + (230 - 70) * u;
-    b = 90 + (130 - 90) * u;
+    // Verde: de gris-verdoso (cerca de 0) a verde brillante (+5%)
+    const u = (t - 0.5) * 2;  // 0 → 1
+    r = 80 - u * 50;          // 80 → 30
+    g = 130 + u * 100;        // 130 → 230
+    b = 110 + u * 20;         // 110 → 130
   }
-  // Si el cambio es exactamente 0 o casi (±0.5%), usar gris-cyan neutral
-  if (Math.abs(change) < 0.5) {
-    r = 80; g = 110; b = 140;
+
+  // Cambio insignificante (±0.3%) → gris-cyan neutral
+  if (Math.abs(change) < 0.3) {
+    r = 90; g = 110; b = 130;
   }
-  const intensity = Math.abs(clamped) / 10;
+
+  const intensity = Math.abs(clamped) / 5;
   return {
     fill: `rgb(${r|0}, ${g|0}, ${b|0})`,
-    glow: `rgba(${r|0}, ${g|0}, ${b|0}, ${0.4 + intensity * 0.4})`,
+    glow: `rgba(${r|0}, ${g|0}, ${b|0}, ${0.45 + intensity * 0.4})`,
   };
 }
 
@@ -1553,13 +1557,31 @@ function getFilteredData() {
 }
 
 function render() {
-  const w = svg.node().clientWidth;
-  const h = svg.node().clientHeight;
+  // Guard: el SVG debe existir y tener dimensiones
+  const svgNode = svg.node();
+  if (!svgNode) return;
+  const w = svgNode.clientWidth;
+  const h = svgNode.clientHeight;
+  if (w === 0 || h === 0) {
+    // Reintentar tras el siguiente frame si aún no hay layout
+    requestAnimationFrame(() => render());
+    return;
+  }
+
+  // Guard: debe haber datos
+  if (!STATE.data || STATE.data.length === 0) return;
+
   const data = getFilteredData();
+  if (!data || data.length === 0) {
+    // Limpiar canvas si la búsqueda no devuelve nada
+    if (gRoot) gRoot.selectAll('g.tile-group').remove();
+    return;
+  }
+
   const ck = changeKey();
 
   data.forEach(d => {
-    d.color = colorForChange(d[ck]);
+    d.color = colorForChange(d[ck] || 0);
   });
 
   // Si hay búsqueda activa o ALL, mostrar todos sin agrupar
@@ -1656,7 +1678,7 @@ function render() {
     .attr('width', d => Math.max(0, d.x1 - d.x0))
     .attr('height', d => Math.max(0, d.y1 - d.y0))
     .attr('fill', d => d.data._isOthers ? '#0a1620' : d.data.color.fill)
-    .attr('fill-opacity', d => d.data._isOthers ? 0.92 : 0.45)
+    .attr('fill-opacity', d => d.data._isOthers ? 0.92 : 0.65)
     .attr('stroke', d => d.data._isOthers ? '#00f0ff' : d.data.color.fill)
     .attr('stroke-opacity', d => d.data._isOthers ? 0.8 : 1)
     .attr('stroke-width', d => d.data._isOthers ? 1.5 : 1.5)
@@ -2376,38 +2398,10 @@ function updateTicker() {
 }
 
 /* =========================================================================
-   LIVE WOBBLE
+   LIVE UPDATES — Quitamos el "wobble" sintético. Los datos se refrescan
+   cada 60s desde Taostats (loadFromProxy). El panel lateral si está abierto
+   se actualiza con cada nuevo fetch.
    ========================================================================= */
-setInterval(() => {
-  STATE.data.forEach(d => {
-    d.change1h  += (Math.random() - 0.5) * 0.3;
-    d.change24h += (Math.random() - 0.5) * 0.15;
-    d.change7d  += (Math.random() - 0.5) * 0.1;
-    d.change30d += (Math.random() - 0.5) * 0.05;
-    d.change1h  = Math.max(-20, Math.min(20, d.change1h));
-    d.change24h = Math.max(-50, Math.min(60, d.change24h));
-    d.change7d  = Math.max(-70, Math.min(90, d.change7d));
-    d.change30d = Math.max(-90, Math.min(200, d.change30d));
-    d.price *= (1 + (Math.random() - 0.5) * 0.002);
-  });
-
-  const ck = changeKey();
-
-  if (STATE.view === 'bubbles') {
-    // Re-render completo para que el agrupamiento Others se recalcule correctamente
-    render();
-  } else {
-    renderList();
-  }
-
-  if (STATE.selected) {
-    const ckSel = changeKey();
-    document.getElementById('panel-price').textContent = fmtPrice(STATE.selected.price);
-    const chEl = document.getElementById('panel-change');
-    chEl.textContent = fmtPct(STATE.selected[ckSel]) + '  ·  ' + STATE.timeframe.toUpperCase();
-    chEl.className = 'panel-change ' + (STATE.selected[ckSel] >= 0 ? 'pos' : 'neg');
-  }
-}, 2500);
 
 /* =========================================================================
    RESIZE
@@ -2554,8 +2548,25 @@ async function loadFromProxy() {
     _lastLoadMs = Date.now();
 
     updateTicker();
-    render();
-    console.log(`[bittensor-pro] ✓ datos reales cargados: ${mapped.length} subnets, TAO=$${TAO_USD.toFixed(2)}`);
+
+    // Refrescar la vista activa con manejo de errores
+    try {
+      if (STATE.view === 'bubbles') render();
+      else renderList();
+    } catch (err) {
+      console.error('[bittensor-pro] error renderizando:', err);
+    }
+
+    // Si hay un panel lateral abierto, actualizar con los datos nuevos de esa subnet
+    if (STATE.selected && !STATE.selected._isOthers) {
+      const updated = mapped.find(s => s.id === STATE.selected.id);
+      if (updated) {
+        STATE.selected = updated;
+        try { populatePanel(updated); } catch(e) { console.error(e); }
+      }
+    }
+
+    console.log(`[bittensor-pro] ✓ datos cargados: ${mapped.length} subnets, TAO=$${TAO_USD.toFixed(2)}`);
   } catch (err) {
     console.error('[bittensor-pro] proxy fetch falló, manteniendo datos previos:', err);
   } finally {
