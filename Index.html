@@ -353,6 +353,26 @@ box-shadow: 0 0 8px var(–neon-cyan);
 animation: blink 1.4s ease-in-out infinite;
 }
 
+/* Enlace secundario “Aprender” */
+.learn-link {
+margin-top: 6px;
+font-family: ‘Share Tech Mono’, monospace;
+font-size: 11px;
+letter-spacing: 0.18em;
+color: rgba(0, 240, 255, 0.7);
+text-decoration: none;
+text-transform: uppercase;
+border-bottom: 1px dashed rgba(0, 240, 255, 0.3);
+padding-bottom: 2px;
+transition: all 0.2s;
+animation: fade-in 1.2s ease-out 1.7s both;
+}
+.learn-link:hover {
+color: var(–neon-cyan);
+border-bottom-color: var(–neon-cyan);
+text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
 /* HUD esquinas */
 .hud-corner {
 position: fixed;
@@ -471,6 +491,10 @@ gap: 10px;
   </span>
   <span>Ver Subnet Market</span>
   <span class="arrow">→</span>
+</a>
+
+<a href="que-es-bittensor.html" class="learn-link">
+  ¿Nuevo en Bittensor? Empieza por aquí
 </a>
 ```
 
