@@ -487,47 +487,36 @@ function parseSubnet(raw){
     name = STATE.info.name;
   }
 
-  // Series temporales: probamos varios formatos posibles
-  let sevenDay = [];
-  let sevenDayDebug = 'no-field';
+  // Series temporales: cada item es {block_number, timestamp, price}
+  let sevenDayPoints = []; // Array de {price: number, time: Date}
   
-  // Formato 1: array directo de números
   if(Array.isArray(raw.seven_day_prices)){
-    sevenDayDebug = 'array, len=' + raw.seven_day_prices.length + ', sample=' + JSON.stringify(raw.seven_day_prices.slice(0,3));
-    // Puede ser array de números o array de objetos
-    sevenDay = raw.seven_day_prices.map(p => {
-      if(typeof p === 'number') return p;
-      if(typeof p === 'string') return parseFloat(p);
-      if(p && typeof p === 'object'){
-        // Puede ser {price: x} o {value: x} o {p: x}
-        return parseFloat(p.price || p.value || p.p || p[0]) || NaN;
+    sevenDayPoints = raw.seven_day_prices.map(p => {
+      let price = NaN;
+      let time = null;
+      if(typeof p === 'number'){
+        price = p;
+      }else if(typeof p === 'string'){
+        price = parseFloat(p);
+      }else if(p && typeof p === 'object'){
+        price = parseFloat(p.price || p.value || p.p || p[0]) || NaN;
+        if(p.timestamp) time = new Date(p.timestamp);
       }
-      return NaN;
-    }).filter(p => !isNaN(p) && p > 0);
+      return { price, time };
+    }).filter(pt => !isNaN(pt.price) && pt.price > 0);
   }
-  // Formato 2: string JSON
+  // Fallback: string JSON
   else if(typeof raw.seven_day_prices === 'string'){
-    sevenDayDebug = 'string, sample=' + raw.seven_day_prices.substring(0,80);
     try{
       const parsed = JSON.parse(raw.seven_day_prices);
       if(Array.isArray(parsed)){
-        sevenDay = parsed.map(p => parseFloat(p)).filter(p => !isNaN(p) && p > 0);
+        sevenDayPoints = parsed.map(p => ({
+          price: parseFloat(p.price || p),
+          time: p.timestamp ? new Date(p.timestamp) : null
+        })).filter(pt => !isNaN(pt.price) && pt.price > 0);
       }
     }catch(e){}
   }
-  // Formato 3: nombre alternativo
-  else if(Array.isArray(raw.seven_day_price)){
-    sevenDayDebug = 'singular-name, len=' + raw.seven_day_price.length;
-    sevenDay = raw.seven_day_price.map(p => parseFloat(p)).filter(p => !isNaN(p) && p > 0);
-  }
-
-  // DEBUG: imprime en consola lo que llegó
-  console.log('[DEBUG subnet.html] netuid:', id);
-  console.log('[DEBUG subnet.html] seven_day_prices type:', typeof raw.seven_day_prices, 'isArray:', Array.isArray(raw.seven_day_prices));
-  console.log('[DEBUG subnet.html] sevenDayDebug:', sevenDayDebug);
-  console.log('[DEBUG subnet.html] sevenDay parsed length:', sevenDay.length);
-  console.log('[DEBUG subnet.html] All raw keys:', Object.keys(raw));
-  console.log('[DEBUG subnet.html] Raw sample:', raw);
 
   return {
     id,
@@ -542,7 +531,7 @@ function parseSubnet(raw){
     change24h:    parseFloat(raw.price_change_1_day)   || 0,
     change7d:     parseFloat(raw.price_change_1_week)  || 0,
     change30d:    parseFloat(raw.price_change_1_month) || 0,
-    sevenDayPrices: sevenDay,
+    sevenDayPoints,
   };
 }
 
@@ -622,16 +611,7 @@ function renderPage(){
       </div>
       <div class="chart-wrap">
         <canvas id="price-chart"></canvas>
-        ${s.sevenDayPrices.length === 0 ? '<div class="chart-empty">No hay datos históricos disponibles</div>' : ''}
-      </div>
-      <div id="debug-panel" style="margin-top:12px;padding:12px;background:#1a1a2e;border:1px solid #ff2bd6;border-radius:8px;font-family:monospace;font-size:11px;color:#a8b2c0;word-break:break-all;line-height:1.5;">
-        <div style="color:#ff2bd6;font-weight:700;margin-bottom:6px;">⚠️ DEBUG TEMPORAL (mándame captura):</div>
-        <div>netuid: ${s.id}</div>
-        <div>sevenDayPrices.length: ${s.sevenDayPrices.length}</div>
-        <div>seven_day_prices type: ${typeof STATE.rawData?.seven_day_prices}</div>
-        <div>isArray: ${Array.isArray(STATE.rawData?.seven_day_prices)}</div>
-        <div>seven_day_prices sample: ${escapeHtml(JSON.stringify(STATE.rawData?.seven_day_prices, null, 0).substring(0, 200))}</div>
-        <div style="margin-top:6px;color:#6b7385;">All keys: ${escapeHtml(Object.keys(STATE.rawData || {}).join(', '))}</div>
+        ${s.sevenDayPoints.length === 0 ? '<div class="chart-empty">No hay datos históricos disponibles</div>' : ''}
       </div>
     </section>
 
@@ -710,7 +690,7 @@ function updatePriceChange(){
 
 function renderChart(){
   const s = STATE.subnet;
-  if(!s.sevenDayPrices || s.sevenDayPrices.length === 0) return;
+  if(!s.sevenDayPoints || s.sevenDayPoints.length === 0) return;
 
   const canvas = document.getElementById('price-chart');
   if(!canvas) return;
@@ -722,34 +702,46 @@ function renderChart(){
   }
 
   // Datos según timeframe
-  // 7d = 42 puntos (uno cada 4h durante 7 días, en orden cronológico ascendente esperado)
-  // 1d = últimos 6 puntos (~24h)
-  const allPoints = s.sevenDayPrices;
-  const points = STATE.timeframe === '1d' ? allPoints.slice(-6) : allPoints;
-  const totalPoints = points.length;
-
-  // Generar labels de tiempo (relativos a "ahora")
-  // El último punto = ahora; cada paso atrás = 4h
-  const labels = [];
-  const now = new Date();
-  for(let i = totalPoints - 1; i >= 0; i--){
-    const pointsAgo = (totalPoints - 1 - i);
-    const hoursAgo = pointsAgo * 4;
-    const d = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
-    if(STATE.timeframe === '1d'){
-      labels.unshift(d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}));
-    }else{
-      labels.unshift(d.toLocaleDateString('es-ES',{day:'numeric',month:'short'}));
+  // 7d = todos los puntos
+  // 1d = puntos de las últimas 24h (filtrados por timestamp si lo tenemos)
+  const allPoints = s.sevenDayPoints;
+  let points;
+  if(STATE.timeframe === '1d'){
+    // Filtrar últimas 24h por timestamp real
+    const now = Date.now();
+    const dayMs = 24 * 60 * 60 * 1000;
+    points = allPoints.filter(pt => pt.time && (now - pt.time.getTime()) <= dayMs);
+    // Si no hay timestamps, fallback a los últimos 6 puntos
+    if(points.length === 0){
+      points = allPoints.slice(-6);
     }
+  }else{
+    points = allPoints;
   }
 
-  // Color según tendencia (primer vs último punto)
-  const isPositive = points[points.length-1] >= points[0];
+  // Construir labels usando timestamps reales si los tenemos
+  const labels = points.map(pt => {
+    if(!pt.time){
+      return '';
+    }
+    if(STATE.timeframe === '1d'){
+      return pt.time.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    }
+    return pt.time.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+  });
+
+  // Color según tendencia (primer vs último precio)
+  const firstPrice = points[0].price;
+  const lastPrice = points[points.length - 1].price;
+  const isPositive = lastPrice >= firstPrice;
   const lineColor = isPositive ? '#22d87a' : '#ff4d5e';
   const fillColor = isPositive ? 'rgba(34,216,122,0.08)' : 'rgba(255,77,94,0.08)';
 
   // Convertir precios TAO a USD para mostrar
-  const dataUSD = points.map(p => p * STATE.taoUsd);
+  const dataUSD = points.map(pt => pt.price * STATE.taoUsd);
+
+  // Guardar timestamps para tooltip
+  const tooltipTimes = points.map(pt => pt.time);
 
   const ctx = canvas.getContext('2d');
   STATE.chart = new Chart(ctx, {
@@ -790,6 +782,18 @@ function renderChart(){
           bodyFont: { family: "'Orbitron', sans-serif", size: 14, weight: '600' },
           displayColors: false,
           callbacks: {
+            title: (items) => {
+              if(!items.length) return '';
+              const i = items[0].dataIndex;
+              const t = tooltipTimes[i];
+              if(!t) return items[0].label;
+              return t.toLocaleString('es-ES', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+            },
             label: (ctx) => {
               const v = ctx.parsed.y;
               if(v === 0) return '—';
