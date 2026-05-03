@@ -287,25 +287,87 @@
     opacity: 0.7;
   }
 
-  /* ===== LIST ===== */
-  .list {
+  /* ===== LIST (tabla con scroll horizontal en móvil) ===== */
+  .list-wrap {
     position: relative;
     z-index: 1;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .list {
+    min-width: 760px; /* fuerza scroll en móvil */
   }
 
-  .list-row {
+  /* 9 columnas: # | Nombre | Precio | 1h | 24h | 7d | 30d | Volumen | Mcap */
+  .list-row, .list-header {
     display: grid;
-    grid-template-columns: 32px minmax(0, 1fr) 80px 70px;
-    gap: 10px;
+    grid-template-columns:
+      44px              /* # */
+      minmax(140px, 1.2fr) /* nombre */
+      90px              /* precio */
+      72px              /* 1h */
+      72px              /* 24h */
+      72px              /* 7d */
+      72px              /* 30d */
+      100px             /* volumen */
+      110px;            /* mcap */
+    gap: 0;
     align-items: center;
     padding: 12px 16px;
     border-bottom: 1px solid var(--border);
+  }
+
+  .list-header {
+    position: sticky;
+    top: 56px; /* debajo del header sticky principal */
+    z-index: 5;
+    background: rgba(13, 15, 23, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-2);
+  }
+  .list-header > div {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .list-header > div:hover {
+    color: var(--text-muted);
+  }
+  .list-header > div.active {
+    color: var(--cyan);
+    text-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
+  }
+  .list-header .sort-arrow {
+    margin-left: 4px;
+    font-size: 9px;
+    opacity: 0.6;
+  }
+  .list-header .num,
+  .list-row .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .list-header .num-center,
+  .list-row .num-center {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .list-row {
     cursor: pointer;
     transition: background 0.1s;
   }
-  .list-row:active {
-    background: rgba(0, 240, 255, 0.04);
-  }
+  .list-row:active { background: rgba(0, 240, 255, 0.04); }
   @media (hover: hover) {
     .list-row:hover { background: rgba(0, 240, 255, 0.04); }
   }
@@ -340,14 +402,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .price {
+  .price, .vol, .mcap {
     font-family: 'Share Tech Mono', monospace;
     font-size: 13px;
     color: var(--text);
     text-align: right;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+    padding-right: 8px;
   }
+  .vol, .mcap { color: var(--text-muted); }
   .change {
     font-family: 'Share Tech Mono', monospace;
     font-size: 13px;
@@ -355,10 +419,34 @@
     font-variant-numeric: tabular-nums;
     font-weight: 500;
     white-space: nowrap;
+    padding-right: 8px;
   }
   .change.pos { color: var(--green); }
   .change.neg { color: var(--red); }
   .change.zero { color: var(--text-dim); }
+
+  /* Sticky en móvil: # y nombre se quedan fijos al scrollear horizontal */
+  @media (max-width: 760px) {
+    .list-row .rank, .list-header .col-rank {
+      position: sticky;
+      left: 0;
+      background: var(--bg);
+      z-index: 2;
+    }
+    .list-row .subnet-info, .list-header .col-name {
+      position: sticky;
+      left: 44px;
+      background: var(--bg);
+      z-index: 2;
+    }
+    .list-header .col-rank, .list-header .col-name {
+      background: rgba(13, 15, 23, 0.98);
+    }
+    .list-row:hover .rank, .list-row:hover .subnet-info,
+    .list-row:active .rank, .list-row:active .subnet-info {
+      background: #0e1119;
+    }
+  }
 
   /* Estado de carga / vacío */
   .empty-state {
@@ -467,9 +555,24 @@
   </div>
 </div>
 
-<div class="list" id="list">
-  <div class="empty-state">
-    <span class="loading-dot"></span>Cargando datos…
+<div class="list-wrap">
+  <div class="list" id="list">
+    <div class="list-header">
+      <div class="col-rank num-center" data-sort="id">#<span class="sort-arrow"></span></div>
+      <div class="col-name" data-sort="name">Subnet<span class="sort-arrow"></span></div>
+      <div class="num" data-sort="price">Precio<span class="sort-arrow"></span></div>
+      <div class="num" data-sort="change1h">1h<span class="sort-arrow"></span></div>
+      <div class="num" data-sort="change24h">24h<span class="sort-arrow"></span></div>
+      <div class="num" data-sort="change7d">7d<span class="sort-arrow"></span></div>
+      <div class="num" data-sort="change30d">30d<span class="sort-arrow"></span></div>
+      <div class="num" data-sort="volume">Volumen<span class="sort-arrow"></span></div>
+      <div class="num" data-sort="marketCap">Mcap<span class="sort-arrow"></span></div>
+    </div>
+    <div id="rows-container">
+      <div class="empty-state">
+        <span class="loading-dot"></span>Cargando datos…
+      </div>
+    </div>
   </div>
 </div>
 
@@ -567,6 +670,8 @@ const STATE = {
   search: '',
   taoUsd: 0,
   taoChange: 0,
+  sortBy: 'id',     // por defecto: ordenar por número de subnet ascendente
+  sortDir: 'asc',
 };
 
 /* =========================================================================
@@ -652,7 +757,10 @@ function mapSubnet(raw) {
     price: parseFloat(raw.price) || 0,
     marketCap: (parseFloat(raw.market_cap) || 0) / RAO,
     volume: (parseFloat(raw.tao_volume_24_hr) || 0) / RAO,
-    change24h: parseFloat(raw.price_change_1_day) || 0,
+    change1h:  parseFloat(raw.price_change_1_hour)  || 0,
+    change24h: parseFloat(raw.price_change_1_day)   || 0,
+    change7d:  parseFloat(raw.price_change_1_week)  || 0,
+    change30d: parseFloat(raw.price_change_1_month) || 0,
   };
 }
 
@@ -682,8 +790,22 @@ function renderStats(filteredData) {
   document.getElementById('stat-vol').textContent = fmtMoney(totalVol);
 }
 
+function updateHeaderArrows() {
+  const headers = document.querySelectorAll('.list-header > div');
+  headers.forEach(h => {
+    const arrow = h.querySelector('.sort-arrow');
+    if (h.dataset.sort === STATE.sortBy) {
+      h.classList.add('active');
+      arrow.textContent = STATE.sortDir === 'asc' ? '↑' : '↓';
+    } else {
+      h.classList.remove('active');
+      arrow.textContent = '';
+    }
+  });
+}
+
 function renderList() {
-  const listEl = document.getElementById('list');
+  const rowsEl = document.getElementById('rows-container');
 
   // Filtrar por búsqueda
   const q = STATE.search.trim().toLowerCase();
@@ -696,30 +818,50 @@ function renderList() {
     );
   }
 
-  // Ordenar por market cap descendente
-  filtered = [...filtered].sort((a, b) => b.marketCap - a.marketCap);
+  // Ordenar según STATE.sortBy y STATE.sortDir
+  const dir = STATE.sortDir === 'asc' ? 1 : -1;
+  const key = STATE.sortBy;
+  filtered = [...filtered].sort((a, b) => {
+    let av = a[key], bv = b[key];
+    if (key === 'name') {
+      av = (av || '').toLowerCase();
+      bv = (bv || '').toLowerCase();
+      if (av < bv) return -1 * dir;
+      if (av > bv) return  1 * dir;
+      return 0;
+    }
+    av = Number(av) || 0;
+    bv = Number(bv) || 0;
+    return (av - bv) * dir;
+  });
 
   renderStats(filtered);
+  updateHeaderArrows();
 
   if (filtered.length === 0) {
-    listEl.innerHTML = '<div class="empty-state">Sin resultados</div>';
+    rowsEl.innerHTML = '<div class="empty-state">Sin resultados</div>';
     return;
   }
 
   // Construir HTML
-  const html = filtered.map((d, i) => `
+  const html = filtered.map(d => `
     <div class="list-row" data-id="${d.id}">
-      <div class="rank">${i + 1}</div>
+      <div class="rank">${d.id}</div>
       <div class="subnet-info">
         <span class="subnet-symbol">${escapeHtml(d.symbol)}</span>
         <span class="subnet-meta">SN${d.id} · ${escapeHtml(d.name)}</span>
       </div>
       <div class="price">${fmtPrice(d.price)}</div>
+      <div class="change ${pctClass(d.change1h)}">${fmtPct(d.change1h)}</div>
       <div class="change ${pctClass(d.change24h)}">${fmtPct(d.change24h)}</div>
+      <div class="change ${pctClass(d.change7d)}">${fmtPct(d.change7d)}</div>
+      <div class="change ${pctClass(d.change30d)}">${fmtPct(d.change30d)}</div>
+      <div class="vol">${fmtMoney(d.volume)}</div>
+      <div class="mcap">${fmtMoney(d.marketCap)}</div>
     </div>
   `).join('');
 
-  listEl.innerHTML = html;
+  rowsEl.innerHTML = html;
 }
 
 function escapeHtml(s) {
@@ -796,8 +938,25 @@ document.getElementById('search').addEventListener('input', e => {
   renderList();
 });
 
+// Click en cabecera → ordenar
+document.querySelector('.list-header').addEventListener('click', e => {
+  const col = e.target.closest('[data-sort]');
+  if (!col) return;
+  const key = col.dataset.sort;
+  if (STATE.sortBy === key) {
+    // Toggle dirección
+    STATE.sortDir = STATE.sortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    STATE.sortBy = key;
+    // Para cambios numéricos (precio, mcap, vol, %) por defecto descendente
+    // Para id y nombre: ascendente
+    STATE.sortDir = (key === 'id' || key === 'name') ? 'asc' : 'desc';
+  }
+  renderList();
+});
+
 // Click en una fila → abrir Taostats en otra pestaña
-document.getElementById('list').addEventListener('click', e => {
+document.getElementById('rows-container').addEventListener('click', e => {
   const row = e.target.closest('.list-row');
   if (!row) return;
   const id = row.dataset.id;
