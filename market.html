@@ -347,8 +347,16 @@
   }
   .list-header .sort-arrow {
     margin-left: 4px;
-    font-size: 9px;
-    opacity: 0.6;
+    font-size: 10px;
+    opacity: 0.35;
+    transition: opacity 0.15s;
+  }
+  .list-header > div:hover .sort-arrow {
+    opacity: 0.7;
+  }
+  .list-header > div.active .sort-arrow {
+    opacity: 1;
+    font-size: 11px;
   }
   .list-header .num,
   .list-row .num {
@@ -383,18 +391,20 @@
     min-width: 0;
   }
   .subnet-symbol {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.02em;
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.01em;
     color: var(--text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .subnet-meta {
-    font-family: 'Share Tech Mono', monospace;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
     font-size: 10px;
+    letter-spacing: 0.06em;
     color: var(--text-dim);
     white-space: nowrap;
     overflow: hidden;
@@ -567,7 +577,7 @@
       <div class="col-name" data-sort="name">Subnet<span class="sort-arrow"></span></div>
       <div class="num" data-sort="price">Precio<span class="sort-arrow"></span></div>
       <div class="num" data-sort="marketCap">Mcap<span class="sort-arrow"></span></div>
-      <div class="num" data-sort="volume">Volumen<span class="sort-arrow"></span></div>
+      <div class="num" data-sort="volume">Vol 24h<span class="sort-arrow"></span></div>
       <div class="num" data-sort="change" id="hdr-change">24h<span class="sort-arrow"></span></div>
     </div>
     <div id="rows-container">
@@ -602,12 +612,12 @@ const SUBNET_DEFS = {
   4:  { symbol: 'TARGON',   name: 'Targon' },
   5:  { symbol: 'KAITO',    name: 'Open Kaito' },
   6:  { symbol: 'INFINITE', name: 'Infinite Games' },
-  7:  { symbol: 'SUBVTX',   name: 'SubVortex' },
-  8:  { symbol: 'PTN',      name: 'Proprietary Trading' },
+  7:  { symbol: 'SUBVTX',   name: 'Subvortex' },
+  8:  { symbol: 'PTN',      name: 'Proprietary Trading Network' },
   9:  { symbol: 'PRE',      name: 'Pretraining' },
   10: { symbol: 'STURDY',   name: 'Sturdy' },
   11: { symbol: 'DIPPY',    name: 'Dippy Roleplay' },
-  12: { symbol: 'HORDE',    name: 'ComputeHorde' },
+  12: { symbol: 'HORDE',    name: 'Horde' },
   13: { symbol: 'DATA',     name: 'Data Universe' },
   14: { symbol: 'VSTORE',   name: 'VectorStore' },
   15: { symbol: 'DEVAL',    name: 'De-Val' },
@@ -616,7 +626,7 @@ const SUBNET_DEFS = {
   18: { symbol: 'CORTEX',   name: 'Cortex.t' },
   19: { symbol: 'NINETN',   name: 'Nineteen' },
   20: { symbol: 'BITAGT',   name: 'BitAgent' },
-  21: { symbol: 'A2A',      name: 'Omega Any-to-Any' },
+  21: { symbol: 'A2A',      name: 'Omega Any-to-any' },
   22: { symbol: 'DSEARCH',  name: 'Desearch' },
   23: { symbol: 'SOCIAL',   name: 'SocialTensor' },
   24: { symbol: 'OMEGA',    name: 'Omega' },
@@ -630,16 +640,16 @@ const SUBNET_DEFS = {
   33: { symbol: 'READY',    name: 'ReadyAI' },
   34: { symbol: 'BITMIND',  name: 'BitMind' },
   35: { symbol: 'LOGIC',    name: 'LogicNet' },
-  36: { symbol: 'WEBAGT',   name: 'Web Agents' },
+  36: { symbol: 'WEBAGT',   name: 'Web Agents - Autoppia' },
   37: { symbol: 'FT',       name: 'Finetuning' },
   38: { symbol: 'DT',       name: 'Distributed Training' },
   39: { symbol: 'EDGE',     name: 'EdgeMaxxing' },
   40: { symbol: 'CHUNK',    name: 'Chunking' },
   41: { symbol: 'SPORT',    name: 'Sportstensor' },
-  42: { symbol: 'MASA',     name: 'Masa' },
+  42: { symbol: 'MASA',     name: 'Real-Time Data by Masa' },
   43: { symbol: 'GRAPH',    name: 'Graphite' },
   44: { symbol: 'SCORE',    name: 'Score' },
-  45: { symbol: 'SWE',      name: 'SWE' },
+  45: { symbol: 'SWE',      name: 'SWE - Rizzo' },
   46: { symbol: 'NEUR3D',   name: 'Neural3D' },
   47: { symbol: 'COND',     name: 'Condense AI' },
   48: { symbol: 'NEXT',     name: 'Nextplace AI' },
@@ -653,7 +663,7 @@ const SUBNET_DEFS = {
   56: { symbol: 'GRAD',     name: 'Gradients' },
   57: { symbol: 'GAIA',     name: 'Gaia' },
   58: { symbol: 'SPEECH',   name: 'Dippy Speech' },
-  59: { symbol: 'ARENA',    name: 'Agent Arena' },
+  59: { symbol: 'ARENA',    name: 'Agent Arena by Masa' },
   60: { symbol: 'BITSEC',   name: 'Bitsec' },
   61: { symbol: 'RED',      name: 'Red Team' },
   62: { symbol: 'AGT',      name: 'AgenTao' },
@@ -797,12 +807,13 @@ function updateHeaderArrows() {
   const headers = document.querySelectorAll('.list-header > div');
   headers.forEach(h => {
     const arrow = h.querySelector('.sort-arrow');
+    if (!arrow) return;
     if (h.dataset.sort === STATE.sortBy) {
       h.classList.add('active');
       arrow.textContent = STATE.sortDir === 'asc' ? '↑' : '↓';
     } else {
       h.classList.remove('active');
-      arrow.textContent = '';
+      arrow.textContent = '⇅';
     }
   });
 
@@ -817,8 +828,10 @@ function updateHeaderArrows() {
   if (hdrChange) {
     const label = tfLabels[STATE.timeframe] || '24h';
     const isActive = STATE.sortBy === 'change';
-    const arrow = isActive ? (STATE.sortDir === 'asc' ? '↑' : '↓') : '';
+    const arrow = isActive ? (STATE.sortDir === 'asc' ? '↑' : '↓') : '⇅';
     hdrChange.innerHTML = label + '<span class="sort-arrow">' + arrow + '</span>';
+    if (isActive) hdrChange.classList.add('active');
+    else hdrChange.classList.remove('active');
   }
 }
 
@@ -870,8 +883,8 @@ function renderList() {
     <div class="list-row" data-id="${d.id}">
       <div class="rank">${d.id}</div>
       <div class="subnet-info">
-        <span class="subnet-symbol">${escapeHtml(d.symbol)}</span>
-        <span class="subnet-meta">SN${d.id} · ${escapeHtml(d.name)}</span>
+        <span class="subnet-symbol">${escapeHtml(d.name)}</span>
+        <span class="subnet-meta">${escapeHtml(d.symbol)} · SN${d.id}</span>
       </div>
       <div class="price">${fmtPrice(d.price)}</div>
       <div class="mcap">${fmtMoney(d.marketCap)}</div>
