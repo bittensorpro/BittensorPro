@@ -4,7 +4,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Bittensor Pro · Subnet Market</title>
+<title>Subnet Market — Bittensor Pro</title>
+<meta name="description" content="Mercado de subnets de Bittensor en tiempo real. Precios, market cap, cambio 24h y volumen de las 128 subnets. Datos actualizados cada minuto." />
+<link rel="canonical" href="https://bittensor.pro/market.html" />
+<meta property="og:title" content="Subnet Market — Bittensor Pro" />
+<meta property="og:description" content="Mercado de subnets de Bittensor en tiempo real. Precios y datos de las 128 subnets." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_ES" />
+<meta property="og:url" content="https://bittensor.pro/market.html" />
+<meta property="og:site_name" content="Bittensor Pro" />
 
 <!-- PWA / iOS -->
 
@@ -155,6 +163,30 @@
   }
   .tao-change.pos { color: var(--green); }
   .tao-change.neg { color: var(--red); }
+
+  /* Botón Aprender en header */
+  .learn-btn {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-radius: 6px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    text-shadow: 0 0 6px rgba(0, 240, 255, 0.4);
+  }
+  .learn-btn:hover {
+    border-color: var(--cyan);
+    background: rgba(0, 240, 255, 0.06);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  }
+  @media (max-width: 480px) {
+    .learn-btn { font-size: 10px; padding: 5px 8px; letter-spacing: 0.12em; }
+  }
 
   /* ===== STATS BAR ===== */
   .stats-bar {
@@ -402,6 +434,7 @@
       <span class="brand-sub">Subnet Market</span>
     </div>
   </a>
+  <a href="aprende.html" class="learn-btn" title="Academia Bittensor">Aprender</a>
   <div class="tao-info">
     <span class="tao-label">TAO</span>
     <span class="tao-price" id="tao-price">—</span>
