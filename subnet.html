@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title id="page-title">Subnet · Bittensor Pro</title>
+<meta name="description" id="page-desc" content="Detalle de subnet de Bittensor: precio, market cap, volumen, gráfica y datos." />
+<link rel="canonical" id="page-canonical" href="https://bittensor.pro/subnet.html" />
+
+<meta property="og:title" id="og-title" content="Subnet · Bittensor Pro" />
+<meta property="og:description" id="og-desc" content="Datos en tiempo real de subnet de Bittensor." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="es_ES" />
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#05060a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' rx='48' fill='%230a0817'/%3E%3Cg transform='translate(128,128)' fill='%23ffffff'%3E%3Crect x='-65' y='-58' width='130' height='18' rx='2'/%3E%3Crect x='-12' y='-40' width='24' height='108' rx='2'/%3E%3C/g%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@700;900&family=Fraunces:ital,wght@0,400;0,600;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Chart.js para la gráfica -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+:root{
+  --bg:#05060a;--bg-2:#0d0f17;--bg-3:#141826;
+  --border:rgba(0,240,255,.10);--border-2:rgba(0,240,255,.22);
+  --text:#e8f0f5;--text-muted:#a8b2c0;--text-dim:#6b7385;--text-faint:#4a5263;
+  --cyan:#00f0ff;--magenta:#ff2bd6;--green:#22d87a;--red:#ff4d5e;
+  --max-width:760px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Chakra Petch',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.65;
+  overflow-x:hidden;min-height:100vh;
+}
+body::before{
+  content:"";position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%,rgba(0,240,255,.06),transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,43,214,.03),transparent 60%);
+  pointer-events:none;z-index:0;
+}
+
+/* TOPBAR */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  padding:12px 20px;padding-top:calc(12px + env(safe-area-inset-top));
+  background:rgba(5,6,10,.85);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.brand-mark{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,rgba(0,240,255,.12),rgba(255,43,214,.10));
+  border:1px solid rgba(0,240,255,.4);
+  display:grid;place-items:center;color:#fff;
+  font-family:'Orbitron',serif;font-weight:900;font-size:18px;
+  box-shadow:0 0 12px rgba(0,240,255,.3);
+  text-shadow:0 0 8px rgba(0,240,255,.7);
+}
+.brand-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:14px;letter-spacing:.06em;color:#f4faff}
+.brand-title .pro{color:var(--magenta);font-style:italic;margin-left:3px;text-shadow:0 0 8px rgba(255,43,214,.5)}
+.nav{display:flex;gap:16px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.nav a{color:var(--text-muted);text-decoration:none;padding:4px 0;transition:color .15s}
+.nav a.active{color:var(--cyan);text-shadow:0 0 8px rgba(0,240,255,.5)}
+.nav a:hover{color:var(--text)}
+
+/* CONTAINER */
+.container{
+  max-width:var(--max-width);margin:0 auto;
+  padding:24px 20px 60px;position:relative;z-index:1;
+}
+
+/* BREADCRUMB */
+.breadcrumb{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  letter-spacing:.12em;color:var(--text-faint);
+  text-transform:uppercase;margin-bottom:24px;
+}
+.breadcrumb a{color:var(--cyan);text-decoration:none}
+.breadcrumb a:hover{color:var(--text)}
+
+/* HERO */
+.hero{margin-bottom:32px}
+.subnet-name{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:42px;line-height:1.05;letter-spacing:-.02em;
+  color:#fff;margin-bottom:8px;
+}
+.subnet-ticker{
+  font-family:'Orbitron',sans-serif;font-weight:600;
+  font-size:12px;letter-spacing:.18em;
+  color:var(--text-dim);text-transform:uppercase;
+  margin-bottom:24px;
+}
+.price-row{
+  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+}
+.price-big{
+  font-family:'Orbitron',sans-serif;font-weight:700;
+  font-size:36px;color:#fff;letter-spacing:.01em;
+  font-variant-numeric:tabular-nums;
+}
+.price-change{
+  font-family:'Share Tech Mono',monospace;
+  font-size:18px;font-weight:500;
+  font-variant-numeric:tabular-nums;
+}
+.price-change.pos{color:var(--green)}
+.price-change.neg{color:var(--red)}
+.price-change.zero{color:var(--text-dim)}
+.price-change-label{
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;color:var(--text-faint);
+  letter-spacing:.16em;text-transform:uppercase;
+}
+
+/* CHART AREA */
+.chart-section{margin-bottom:36px}
+.chart-controls{
+  display:flex;justify-content:flex-end;gap:0;margin-bottom:16px;
+}
+.tf-toggle{
+  display:inline-flex;background:var(--bg-2);
+  border:1px solid var(--border);border-radius:8px;padding:2px;
+}
+.tf-toggle button{
+  background:transparent;border:none;
+  color:var(--text-dim);padding:6px 14px;border-radius:6px;
+  font-family:'Share Tech Mono',monospace;font-size:12px;font-weight:500;
+  cursor:pointer;transition:all .15s;min-width:40px;
+}
+.tf-toggle button.active{
+  background:rgba(0,240,255,.1);color:var(--cyan);
+  text-shadow:0 0 6px rgba(0,240,255,.5);
+}
+.chart-wrap{
+  background:var(--bg-2);border:1px solid var(--border);
+  border-radius:12px;padding:20px;
+  height:320px;position:relative;
+}
+.chart-wrap canvas{max-width:100%;max-height:100%}
+.chart-empty{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:13px;
+}
+
+/* STATS GRID */
+.stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;margin-bottom:36px;
+}
+.stat-cell{
+  background:var(--bg-2);padding:16px 20px;
+}
+.stat-label{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  letter-spacing:.16em;color:var(--text-faint);
+  text-transform:uppercase;margin-bottom:6px;
+}
+.stat-value{
+  font-family:'Orbitron',sans-serif;font-weight:600;
+  font-size:18px;color:var(--text);font-variant-numeric:tabular-nums;
+}
+.stat-value.pos{color:var(--green)}
+.stat-value.neg{color:var(--red)}
+
+/* DESCRIPTION */
+.description-section{margin-bottom:36px}
+.section-label{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  letter-spacing:.22em;color:var(--cyan);
+  text-transform:uppercase;margin-bottom:14px;
+}
+.description-text{
+  background:var(--bg-2);border:1px solid var(--border);
+  border-radius:12px;padding:22px 24px;
+  color:var(--text-muted);font-size:15.5px;line-height:1.7;
+}
+
+/* ACTIONS */
+.actions{
+  display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 20px;border-radius:10px;
+  font-family:'Share Tech Mono',monospace;font-size:12px;
+  letter-spacing:.16em;text-transform:uppercase;
+  text-decoration:none;border:1px solid var(--border-2);
+  background:rgba(0,240,255,.04);color:var(--cyan);
+  transition:all .15s;
+}
+.btn:hover{
+  background:rgba(0,240,255,.1);
+  border-color:var(--cyan);
+}
+.btn.magenta{
+  border-color:rgba(255,43,214,.3);
+  background:rgba(255,43,214,.04);color:var(--magenta);
+}
+.btn.magenta:hover{
+  background:rgba(255,43,214,.1);
+  border-color:var(--magenta);
+}
+
+/* LOADING / ERROR */
+.loading-state{
+  text-align:center;padding:60px 20px;
+  color:var(--text-dim);font-family:'Share Tech Mono',monospace;
+  font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+}
+.loading-dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--cyan);margin-right:8px;
+  animation:pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:.3;transform:scale(.8)}
+  50%{opacity:1;transform:scale(1)}
+}
+.error-state{
+  text-align:center;padding:60px 20px;
+}
+.error-state h2{
+  font-family:'Fraunces',serif;font-weight:600;
+  font-size:24px;color:#fff;margin-bottom:12px;
+}
+.error-state p{
+  color:var(--text-muted);margin-bottom:24px;
+}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--border);
+  padding:30px 20px calc(30px + env(safe-area-inset-bottom));
+  text-align:center;font-family:'Share Tech Mono',monospace;
+  font-size:10px;letter-spacing:.2em;color:var(--text-faint);
+  text-transform:uppercase;position:relative;z-index:1;
+}
+footer a{color:var(--cyan);text-decoration:none}
+
+/* MOBILE */
+@media(max-width:600px){
+  .container{padding:20px 16px 40px}
+  .subnet-name{font-size:34px}
+  .price-big{font-size:28px}
+  .price-change{font-size:16px}
+  .chart-wrap{height:260px;padding:14px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-value{font-size:16px}
+  .nav a:not(.active){display:none}
+  .actions .btn{flex:1;justify-content:center}
+}
+</style>
+
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="brand">
+    <div class="brand-mark">τ</div>
+    <span class="brand-title">Bittensor<span class="pro">Pro</span></span>
+  </a>
+  <nav class="nav">
+    <a href="aprende.html">Aprende</a>
+    <a href="market.html" class="active">Market</a>
+    <a href="index.html">Inicio</a>
+  </nav>
+</header>
+
+<div class="container" id="content">
+  <div class="loading-state">
+    <span class="loading-dot"></span>Cargando datos…
+  </div>
+</div>
+
+<footer>
+  <a href="index.html">Bittensor Pro</a> · 2026 · No es consejo financiero
+</footer>
+
+<script>
+/* =========================================================================
+   CONFIGURACIÓN
+   ========================================================================= */
+const API_BASE = 'https://tao360.qrchd889gj.workers.dev';
+const SUBNETS_INFO_URL = 'https://raw.githubusercontent.com/taostat/subnets-infos/main/subnets.json';
+const RAO = 1_000_000_000;
+
+/* Diccionario de fallback (mismos que market.html) */
+const SUBNET_DEFS = {
+  0:  { symbol: 'ROOT',     name: 'Root' },
+  1:  { symbol: 'APEX',     name: 'Apex' },
+  2:  { symbol: 'OMRON',    name: 'Omron' },
+  3:  { symbol: 'TEMPLAR',  name: 'Templar' },
+  4:  { symbol: 'TARGON',   name: 'Targon' },
+  5:  { symbol: 'KAITO',    name: 'Open Kaito' },
+  6:  { symbol: 'INFINITE', name: 'Infinite Games' },
+  7:  { symbol: 'SUBVTX',   name: 'Subvortex' },
+  8:  { symbol: 'PTN',      name: 'Proprietary Trading Network' },
+  9:  { symbol: 'PRE',      name: 'Pretraining' },
+  10: { symbol: 'STURDY',   name: 'Sturdy' },
+  11: { symbol: 'DIPPY',    name: 'Dippy Roleplay' },
+  12: { symbol: 'HORDE',    name: 'Horde' },
+  13: { symbol: 'DATA',     name: 'Data Universe' },
+  14: { symbol: 'VSTORE',   name: 'VectorStore' },
+  15: { symbol: 'DEVAL',    name: 'De-Val' },
+  16: { symbol: 'BITADS',   name: 'BitAds' },
+  17: { symbol: '3GEN',     name: 'Three Gen' },
+  18: { symbol: 'CORTEX',   name: 'Cortex.t' },
+  19: { symbol: 'NINETN',   name: 'Nineteen' },
+  20: { symbol: 'BITAGT',   name: 'BitAgent' },
+  21: { symbol: 'A2A',      name: 'Omega Any-to-any' },
+  22: { symbol: 'DSEARCH',  name: 'Desearch' },
+  23: { symbol: 'SOCIAL',   name: 'SocialTensor' },
+  24: { symbol: 'OMEGA',    name: 'Omega' },
+  25: { symbol: 'FOLD',     name: 'Protein Folding' },
+  27: { symbol: 'NICOMP',   name: 'NI Compute' },
+  28: { symbol: 'LOL',      name: 'LOL' },
+  29: { symbol: 'COLDINT',  name: 'Coldint' },
+  30: { symbol: 'BET',      name: 'Bettensor' },
+  31: { symbol: 'NAS',      name: 'NAS Chain' },
+  32: { symbol: 'ITSAI',    name: "It's AI" },
+  33: { symbol: 'READY',    name: 'ReadyAI' },
+  34: { symbol: 'BITMIND',  name: 'BitMind' },
+  35: { symbol: 'LOGIC',    name: 'LogicNet' },
+  36: { symbol: 'WEBAGT',   name: 'Web Agents - Autoppia' },
+  37: { symbol: 'FT',       name: 'Finetuning' },
+  38: { symbol: 'DT',       name: 'Distributed Training' },
+  39: { symbol: 'EDGE',     name: 'EdgeMaxxing' },
+  40: { symbol: 'CHUNK',    name: 'Chunking' },
+  41: { symbol: 'SPORT',    name: 'Sportstensor' },
+  42: { symbol: 'MASA',     name: 'Real-Time Data by Masa' },
+  43: { symbol: 'GRAPH',    name: 'Graphite' },
+  44: { symbol: 'SCORE',    name: 'Score' },
+  45: { symbol: 'SWE',      name: 'SWE - Rizzo' },
+  46: { symbol: 'NEUR3D',   name: 'Neural3D' },
+  47: { symbol: 'COND',     name: 'Condense AI' },
+  48: { symbol: 'NEXT',     name: 'Nextplace AI' },
+  49: { symbol: 'HIVE',     name: 'Hivetrain' },
+  50: { symbol: 'SYNTH',    name: 'Synth' },
+  51: { symbol: 'CELIUM',   name: 'Compute Subnet' },
+  52: { symbol: 'DOJO',     name: 'Dojo' },
+  53: { symbol: 'EF',       name: 'Efficient Frontier' },
+  54: { symbol: 'WGENIE',   name: 'WebGenieAI' },
+  55: { symbol: 'PRECOG',   name: 'Precog' },
+  56: { symbol: 'GRAD',     name: 'Gradients' },
+  57: { symbol: 'GAIA',     name: 'Gaia' },
+  58: { symbol: 'SPEECH',   name: 'Dippy Speech' },
+  59: { symbol: 'ARENA',    name: 'Agent Arena by Masa' },
+  60: { symbol: 'BITSEC',   name: 'Bitsec' },
+  61: { symbol: 'RED',      name: 'Red Team' },
+  62: { symbol: 'AGT',      name: 'AgenTao' },
+  64: { symbol: 'CHUTES',   name: 'Chutes' },
+  65: { symbol: 'TPN',      name: 'TAO Private Network' },
+  66: { symbol: 'FAKEN',    name: 'FakeNews' },
+  68: { symbol: 'NOVA',     name: 'Nova' },
+};
+
+/* =========================================================================
+   ESTADO
+   ========================================================================= */
+const STATE = {
+  netuid: null,
+  subnet: null,        // datos del pool
+  info: null,          // datos del JSON oficial GitHub
+  taoUsd: 0,
+  currency: 'USD',
+  timeframe: '7d',     // 7d por defecto (más datos)
+  chart: null,
+};
+
+/* =========================================================================
+   FORMATTERS
+   ========================================================================= */
+function fmtPriceUSD(taoPrice){
+  const usd = taoPrice * STATE.taoUsd;
+  if(usd === 0) return '—';
+  if(usd < 0.01) return '$' + usd.toFixed(5);
+  if(usd < 1)    return '$' + usd.toFixed(4);
+  if(usd < 100)  return '$' + usd.toFixed(2);
+  return '$' + usd.toLocaleString('en-US',{maximumFractionDigits:2});
+}
+function fmtMoneyUSD(taoVal){
+  const usd = taoVal * STATE.taoUsd;
+  if(usd === 0) return '—';
+  if(usd >= 1e9) return '$' + (usd/1e9).toFixed(2) + 'B';
+  if(usd >= 1e6) return '$' + (usd/1e6).toFixed(2) + 'M';
+  if(usd >= 1e3) return '$' + (usd/1e3).toFixed(2) + 'K';
+  return '$' + usd.toFixed(2);
+}
+function fmtPct(v){
+  if(v === null || v === undefined || isNaN(v)) return '—';
+  const sign = v > 0 ? '+' : '';
+  return sign + v.toFixed(2) + '%';
+}
+function pctClass(v){
+  if(v > 0.001) return 'pos';
+  if(v < -0.001) return 'neg';
+  return 'zero';
+}
+function escapeHtml(str){
+  if(!str) return '';
+  return String(str).replace(/[&<>"']/g,c=>(
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+
+/* =========================================================================
+   PARSEO URL
+   ========================================================================= */
+function getNetuidFromUrl(){
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get('id'), 10);
+  if(isNaN(id) || id < 0 || id > 256) return null;
+  return id;
+}
+
+/* =========================================================================
+   CARGA DE DATOS
+   ========================================================================= */
+async function fetchTaoPrice(){
+  try{
+    const r = await fetch(`${API_BASE}/api/price/latest/v1?asset=tao`);
+    const j = await r.json();
+    if(j && j.data && j.data[0]){
+      STATE.taoUsd = parseFloat(j.data[0].price) || 0;
+    }
+  }catch(e){
+    console.error('Error fetching TAO price', e);
+  }
+}
+
+async function fetchSubnetData(netuid){
+  // Buscamos el item con el netuid en las páginas paginadas
+  const pages = [1, 2];
+  for(const page of pages){
+    try{
+      const r = await fetch(`${API_BASE}/api/dtao/pool/latest/v1?page=${page}&limit=100`);
+      const j = await r.json();
+      const list = (j && j.data) ? j.data : (Array.isArray(j) ? j : []);
+      const item = list.find(x => parseInt(x.netuid,10) === netuid);
+      if(item) return item;
+    }catch(e){
+      console.error('Error fetching pool data', e);
+    }
+  }
+  return null;
+}
+
+async function fetchSubnetInfo(){
+  try{
+    const r = await fetch(SUBNETS_INFO_URL);
+    if(!r.ok) return null;
+    const j = await r.json();
+    return j[String(STATE.netuid)] || null;
+  }catch(e){
+    console.error('Error fetching subnet info JSON', e);
+    return null;
+  }
+}
+
+/* =========================================================================
+   PARSEO Y NORMALIZACIÓN
+   ========================================================================= */
+function parseSubnet(raw){
+  const id = parseInt(raw.netuid, 10);
+  const def = SUBNET_DEFS[id] || {};
+  let symbol = def.symbol || '';
+  let name = def.name || `Subnet ${id}`;
+
+  // Si tenemos info del JSON oficial, prevalece para nombre
+  if(STATE.info && STATE.info.name && STATE.info.name !== 'Unknown'){
+    name = STATE.info.name;
+  }
+
+  // Series temporales: seven_day_prices = array de números (precios)
+  let sevenDay = [];
+  if(Array.isArray(raw.seven_day_prices)){
+    sevenDay = raw.seven_day_prices.map(p => parseFloat(p)).filter(p => !isNaN(p));
+  }
+
+  return {
+    id,
+    symbol,
+    name,
+    price:        parseFloat(raw.price) || 0,
+    marketCap:    (parseFloat(raw.market_cap) || 0) / RAO,
+    volume:       (parseFloat(raw.tao_volume_24_hr) || 0) / RAO,
+    liquidity:    (parseFloat(raw.liquidity) || 0) / RAO,
+    totalAlpha:   (parseFloat(raw.total_alpha) || 0) / RAO,
+    change1h:     parseFloat(raw.price_change_1_hour)  || 0,
+    change24h:    parseFloat(raw.price_change_1_day)   || 0,
+    change7d:     parseFloat(raw.price_change_1_week)  || 0,
+    change30d:    parseFloat(raw.price_change_1_month) || 0,
+    sevenDayPrices: sevenDay,
+  };
+}
+
+/* =========================================================================
+   RENDER
+   ========================================================================= */
+function renderError(msg){
+  const html = `
+    <div class="breadcrumb">
+      <a href="market.html">← Volver al Market</a>
+    </div>
+    <div class="error-state">
+      <h2>Subnet no encontrada</h2>
+      <p>${escapeHtml(msg)}</p>
+      <a href="market.html" class="btn">← Volver al Market</a>
+    </div>
+  `;
+  document.getElementById('content').innerHTML = html;
+}
+
+function renderPage(){
+  const s = STATE.subnet;
+  const info = STATE.info;
+
+  // Actualizar metadata SEO
+  const titleStr = `${s.name} (SN${s.id}) — Precio, Mcap, Gráfica · Bittensor Pro`;
+  const descStr = `Datos en vivo de ${s.name} en Bittensor: precio, market cap, volumen 24h, gráfica histórica y métricas. Subnet ${s.id}.`;
+  document.getElementById('page-title').textContent = titleStr;
+  document.getElementById('page-desc').setAttribute('content', descStr);
+  document.getElementById('og-title').setAttribute('content', titleStr);
+  document.getElementById('og-desc').setAttribute('content', descStr);
+  document.getElementById('page-canonical').setAttribute('href', `https://bittensor.pro/subnet.html?id=${s.id}`);
+
+  const change = s[`change${STATE.timeframe === '1d' ? '24h' : '7d'}`] || 0;
+  const tfLabel = STATE.timeframe === '1d' ? '24h' : '7d';
+
+  // Botones de descripción/github (condicionales)
+  let actions = '';
+  if(info && info.github){
+    actions += `<a href="${escapeHtml(info.github)}" target="_blank" rel="noopener" class="btn">GitHub →</a>`;
+  }
+  actions += `<a href="https://taostats.io/subnets/${s.id}" target="_blank" rel="noopener" class="btn magenta">Ver en Taostats →</a>`;
+
+  // Sección de descripción (condicional)
+  let descriptionSection = '';
+  if(info && info.description && info.description.trim()){
+    descriptionSection = `
+      <div class="description-section">
+        <div class="section-label">// Sobre ${escapeHtml(s.name)}</div>
+        <div class="description-text">${escapeHtml(info.description)}</div>
+      </div>
+    `;
+  }
+
+  // Construir HTML
+  const html = `
+    <div class="breadcrumb">
+      <a href="market.html">← Volver al Market</a>
+    </div>
+
+    <section class="hero">
+      <h1 class="subnet-name">${escapeHtml(s.name)}</h1>
+      <div class="subnet-ticker">${escapeHtml(s.symbol || `SN${s.id}`)} · SN${s.id}</div>
+      <div class="price-row">
+        <div class="price-big" id="price-big">${fmtPriceUSD(s.price)}</div>
+        <div class="price-change ${pctClass(change)}">${fmtPct(change)}</div>
+        <div class="price-change-label">${tfLabel}</div>
+      </div>
+    </section>
+
+    <section class="chart-section">
+      <div class="chart-controls">
+        <div class="tf-toggle" id="tf-toggle">
+          <button data-tf="1d">1d</button>
+          <button data-tf="7d" class="active">7d</button>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="price-chart"></canvas>
+        ${s.sevenDayPrices.length === 0 ? '<div class="chart-empty">No hay datos históricos disponibles</div>' : ''}
+      </div>
+    </section>
+
+    <section>
+      <div class="section-label">// Estadísticas</div>
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <div class="stat-label">Market Cap</div>
+          <div class="stat-value">${fmtMoneyUSD(s.marketCap)}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Volumen 24h</div>
+          <div class="stat-value">${fmtMoneyUSD(s.volume)}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Liquidez</div>
+          <div class="stat-value">${fmtMoneyUSD(s.liquidity)}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Cambio 1h</div>
+          <div class="stat-value ${pctClass(s.change1h)}">${fmtPct(s.change1h)}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Cambio 24h</div>
+          <div class="stat-value ${pctClass(s.change24h)}">${fmtPct(s.change24h)}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Cambio 7d</div>
+          <div class="stat-value ${pctClass(s.change7d)}">${fmtPct(s.change7d)}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Cambio 30d</div>
+          <div class="stat-value ${pctClass(s.change30d)}">${fmtPct(s.change30d)}</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Supply (α)</div>
+          <div class="stat-value">${(s.totalAlpha/1e6).toFixed(2)}M</div>
+        </div>
+      </div>
+    </section>
+
+    ${descriptionSection}
+
+    <div class="actions">${actions}</div>
+  `;
+
+  document.getElementById('content').innerHTML = html;
+
+  // Listener del toggle 1d/7d
+  document.getElementById('tf-toggle').addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#tf-toggle button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    STATE.timeframe = btn.dataset.tf;
+    renderChart();
+    updatePriceChange();
+  });
+
+  // Renderizar la gráfica
+  renderChart();
+}
+
+function updatePriceChange(){
+  const s = STATE.subnet;
+  const change = s[`change${STATE.timeframe === '1d' ? '24h' : '7d'}`] || 0;
+  const tfLabel = STATE.timeframe === '1d' ? '24h' : '7d';
+  const changeEl = document.querySelector('.price-change');
+  const labelEl = document.querySelector('.price-change-label');
+  if(changeEl){
+    changeEl.className = 'price-change ' + pctClass(change);
+    changeEl.textContent = fmtPct(change);
+  }
+  if(labelEl) labelEl.textContent = tfLabel;
+}
+
+function renderChart(){
+  const s = STATE.subnet;
+  if(!s.sevenDayPrices || s.sevenDayPrices.length === 0) return;
+
+  const canvas = document.getElementById('price-chart');
+  if(!canvas) return;
+
+  // Destruir gráfica previa si existe
+  if(STATE.chart){
+    STATE.chart.destroy();
+    STATE.chart = null;
+  }
+
+  // Datos según timeframe
+  // 7d = 42 puntos (uno cada 4h durante 7 días, en orden cronológico ascendente esperado)
+  // 1d = últimos 6 puntos (~24h)
+  const allPoints = s.sevenDayPrices;
+  const points = STATE.timeframe === '1d' ? allPoints.slice(-6) : allPoints;
+  const totalPoints = points.length;
+
+  // Generar labels de tiempo (relativos a "ahora")
+  // El último punto = ahora; cada paso atrás = 4h
+  const labels = [];
+  const now = new Date();
+  for(let i = totalPoints - 1; i >= 0; i--){
+    const pointsAgo = (totalPoints - 1 - i);
+    const hoursAgo = pointsAgo * 4;
+    const d = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
+    if(STATE.timeframe === '1d'){
+      labels.unshift(d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}));
+    }else{
+      labels.unshift(d.toLocaleDateString('es-ES',{day:'numeric',month:'short'}));
+    }
+  }
+
+  // Color según tendencia (primer vs último punto)
+  const isPositive = points[points.length-1] >= points[0];
+  const lineColor = isPositive ? '#22d87a' : '#ff4d5e';
+  const fillColor = isPositive ? 'rgba(34,216,122,0.08)' : 'rgba(255,77,94,0.08)';
+
+  // Convertir precios TAO a USD para mostrar
+  const dataUSD = points.map(p => p * STATE.taoUsd);
+
+  const ctx = canvas.getContext('2d');
+  STATE.chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: dataUSD,
+        borderColor: lineColor,
+        backgroundColor: fillColor,
+        borderWidth: 2,
+        fill: true,
+        tension: 0.3,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: lineColor,
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(13,15,23,0.95)',
+          titleColor: '#a8b2c0',
+          bodyColor: '#fff',
+          borderColor: 'rgba(0,240,255,0.3)',
+          borderWidth: 1,
+          padding: 12,
+          titleFont: { family: "'Share Tech Mono', monospace", size: 11 },
+          bodyFont: { family: "'Orbitron', sans-serif", size: 14, weight: '600' },
+          displayColors: false,
+          callbacks: {
+            label: (ctx) => {
+              const v = ctx.parsed.y;
+              if(v === 0) return '—';
+              if(v < 0.01) return '$' + v.toFixed(5);
+              if(v < 1) return '$' + v.toFixed(4);
+              return '$' + v.toFixed(2);
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: '#6b7385',
+            font: { family: "'Share Tech Mono', monospace", size: 10 },
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 6,
+          },
+          border: { color: 'rgba(0,240,255,0.10)' }
+        },
+        y: {
+          grid: { color: 'rgba(0,240,255,0.05)', drawBorder: false },
+          ticks: {
+            color: '#6b7385',
+            font: { family: "'Share Tech Mono', monospace", size: 10 },
+            callback: (v) => {
+              if(v === 0) return '$0';
+              if(v < 0.01) return '$' + v.toFixed(4);
+              if(v < 1) return '$' + v.toFixed(3);
+              return '$' + v.toFixed(2);
+            }
+          },
+          border: { display: false }
+        }
+      }
+    }
+  });
+}
+
+/* =========================================================================
+   MAIN
+   ========================================================================= */
+async function init(){
+  STATE.netuid = getNetuidFromUrl();
+
+  if(STATE.netuid === null){
+    renderError('Falta el parámetro ?id en la URL. Ejemplo: subnet.html?id=64');
+    return;
+  }
+
+  // Cargar TAO price + datos de subnet + info GitHub en paralelo
+  const [_, raw, info] = await Promise.all([
+    fetchTaoPrice(),
+    fetchSubnetData(STATE.netuid),
+    fetchSubnetInfo(),
+  ]);
+
+  if(!raw){
+    renderError(`No se encontraron datos para la subnet ${STATE.netuid}. Es posible que no exista o no esté activa.`);
+    return;
+  }
+
+  STATE.info = info;
+  STATE.subnet = parseSubnet(raw);
+  renderPage();
+}
+
+init();
+</script>
+
+</body>
+</html>
