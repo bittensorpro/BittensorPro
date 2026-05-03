@@ -997,13 +997,13 @@ document.querySelector('.list-header').addEventListener('click', e => {
   renderList();
 });
 
-// Click en una fila → abrir Taostats en otra pestaña
+// Click en una fila → abrir página detalle de la subnet
 document.getElementById('rows-container').addEventListener('click', e => {
   const row = e.target.closest('.list-row');
   if (!row) return;
   const id = row.dataset.id;
   if (id) {
-    window.open(`https://taostats.io/subnets/${id}`, '_blank', 'noopener');
+    window.location.href = `subnet.html?id=${id}`;
   }
 });
 
