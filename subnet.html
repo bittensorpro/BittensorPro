@@ -487,11 +487,47 @@ function parseSubnet(raw){
     name = STATE.info.name;
   }
 
-  // Series temporales: seven_day_prices = array de números (precios)
+  // Series temporales: probamos varios formatos posibles
   let sevenDay = [];
+  let sevenDayDebug = 'no-field';
+  
+  // Formato 1: array directo de números
   if(Array.isArray(raw.seven_day_prices)){
-    sevenDay = raw.seven_day_prices.map(p => parseFloat(p)).filter(p => !isNaN(p));
+    sevenDayDebug = 'array, len=' + raw.seven_day_prices.length + ', sample=' + JSON.stringify(raw.seven_day_prices.slice(0,3));
+    // Puede ser array de números o array de objetos
+    sevenDay = raw.seven_day_prices.map(p => {
+      if(typeof p === 'number') return p;
+      if(typeof p === 'string') return parseFloat(p);
+      if(p && typeof p === 'object'){
+        // Puede ser {price: x} o {value: x} o {p: x}
+        return parseFloat(p.price || p.value || p.p || p[0]) || NaN;
+      }
+      return NaN;
+    }).filter(p => !isNaN(p) && p > 0);
   }
+  // Formato 2: string JSON
+  else if(typeof raw.seven_day_prices === 'string'){
+    sevenDayDebug = 'string, sample=' + raw.seven_day_prices.substring(0,80);
+    try{
+      const parsed = JSON.parse(raw.seven_day_prices);
+      if(Array.isArray(parsed)){
+        sevenDay = parsed.map(p => parseFloat(p)).filter(p => !isNaN(p) && p > 0);
+      }
+    }catch(e){}
+  }
+  // Formato 3: nombre alternativo
+  else if(Array.isArray(raw.seven_day_price)){
+    sevenDayDebug = 'singular-name, len=' + raw.seven_day_price.length;
+    sevenDay = raw.seven_day_price.map(p => parseFloat(p)).filter(p => !isNaN(p) && p > 0);
+  }
+
+  // DEBUG: imprime en consola lo que llegó
+  console.log('[DEBUG subnet.html] netuid:', id);
+  console.log('[DEBUG subnet.html] seven_day_prices type:', typeof raw.seven_day_prices, 'isArray:', Array.isArray(raw.seven_day_prices));
+  console.log('[DEBUG subnet.html] sevenDayDebug:', sevenDayDebug);
+  console.log('[DEBUG subnet.html] sevenDay parsed length:', sevenDay.length);
+  console.log('[DEBUG subnet.html] All raw keys:', Object.keys(raw));
+  console.log('[DEBUG subnet.html] Raw sample:', raw);
 
   return {
     id,
@@ -587,6 +623,15 @@ function renderPage(){
       <div class="chart-wrap">
         <canvas id="price-chart"></canvas>
         ${s.sevenDayPrices.length === 0 ? '<div class="chart-empty">No hay datos históricos disponibles</div>' : ''}
+      </div>
+      <div id="debug-panel" style="margin-top:12px;padding:12px;background:#1a1a2e;border:1px solid #ff2bd6;border-radius:8px;font-family:monospace;font-size:11px;color:#a8b2c0;word-break:break-all;line-height:1.5;">
+        <div style="color:#ff2bd6;font-weight:700;margin-bottom:6px;">⚠️ DEBUG TEMPORAL (mándame captura):</div>
+        <div>netuid: ${s.id}</div>
+        <div>sevenDayPrices.length: ${s.sevenDayPrices.length}</div>
+        <div>seven_day_prices type: ${typeof STATE.rawData?.seven_day_prices}</div>
+        <div>isArray: ${Array.isArray(STATE.rawData?.seven_day_prices)}</div>
+        <div>seven_day_prices sample: ${escapeHtml(JSON.stringify(STATE.rawData?.seven_day_prices, null, 0).substring(0, 200))}</div>
+        <div style="margin-top:6px;color:#6b7385;">All keys: ${escapeHtml(Object.keys(STATE.rawData || {}).join(', '))}</div>
       </div>
     </section>
 
@@ -810,6 +855,7 @@ async function init(){
   }
 
   STATE.info = info;
+  STATE.rawData = raw;
   STATE.subnet = parseSubnet(raw);
   renderPage();
 }
