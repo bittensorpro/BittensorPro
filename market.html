@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="es">
@@ -183,13 +184,6 @@
     font-variant-numeric: tabular-nums;
     font-weight: 500;
   }
-  .tao-change {
-    font-size: 10px;
-    font-variant-numeric: tabular-nums;
-  }
-  .tao-change.pos { color: var(--green); }
-  .tao-change.neg { color: var(--red); }
-  .tao-change.zero { color: var(--text-dim); }
   .tao-arrow {
     color: #00f0ff;
     font-size: 12px;
@@ -553,7 +547,6 @@
     .list-row { padding: 12px 12px; gap: 8px; }
     .brand-title { font-size: 14px; }
     .tao-info { padding: 3px 7px; gap: 5px; font-size: 11px; }
-    .tao-info .tao-change { display: none; }
     .stat-value { font-size: 12px; }
     .toggle button { padding: 6px 10px; font-size: 12px; min-width: 30px; }
     #tf-toggle button { padding: 6px 7px; font-size: 11px; min-width: 26px; }
@@ -575,7 +568,6 @@
   <a href="tao.html" class="tao-info" title="Ver página de TAO">
     <span class="tao-symbol">TAO</span>
     <span class="tao-price" id="tao-price">—</span>
-    <span class="tao-change zero" id="tao-change">—</span>
     <span class="tao-arrow">→</span>
   </a>
 </header>
@@ -823,14 +815,11 @@ function mapSubnet(raw) {
    ========================================================================= */
 function renderHeader() {
   const priceEl = document.getElementById('tao-price');
-  const changeEl = document.getElementById('tao-change');
 
   if (STATE.taoUsd > 0) {
     priceEl.textContent = STATE.currency === 'USD'
       ? '$' + STATE.taoUsd.toFixed(2)
       : '1.00 τ';
-    changeEl.textContent = fmtPct(STATE.taoChange);
-    changeEl.className = 'tao-change ' + pctClass(STATE.taoChange);
   }
 }
 
