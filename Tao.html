@@ -914,47 +914,75 @@ async function init(){
 
 init();
 
-// Botón "Volver" inteligente: usa el historial si vienes del propio sitio, si no va al market
+// Botón "Volver" inteligente: usa history.back() siempre que sea posible
 (function setupSmartBack(){
   const link = document.getElementById('back-link');
   if(!link) return;
 
-  // Si llegamos navegando desde el mismo sitio, usamos history.back()
-  // Si entraste directo (sin referrer o desde Google/X), dejamos que vaya a market.html
-  const sameOrigin = document.referrer && document.referrer.startsWith(window.location.origin);
+  // Detectar de dónde viene mediante varias fuentes
+  let fromPath = '';
 
-  if(sameOrigin){
-    // Detectar texto a mostrar según referrer
-    try{
+  // Método 1: sessionStorage (lo guardó la página anterior antes de salir)
+  try {
+    fromPath = sessionStorage.getItem('lastPage') || '';
+  } catch(e){}
+
+  // Método 2: document.referrer como fallback (a veces funciona)
+  if(!fromPath && document.referrer){
+    try {
       const refUrl = new URL(document.referrer);
-      const refPath = refUrl.pathname.split('/').pop() || '';
-      const labels = {
-        'market.html':           '← Volver al Market',
-        'aprende.html':          '← Volver a Aprende',
-        'index.html':            '← Volver al inicio',
-        '':                      '← Volver al inicio',
-        'que-es-bittensor.html': '← Volver a la guía',
-        'subnet.html':           '← Volver a la subnet',
-      };
-      // Si es un módulo de academia
-      if(refPath.startsWith('aprende-modulo-')){
-        link.textContent = '← Volver al módulo';
-      } else if(labels[refPath] !== undefined){
-        link.textContent = labels[refPath];
-      } else {
-        link.textContent = '← Volver';
+      if(refUrl.origin === window.location.origin){
+        fromPath = refUrl.pathname.split('/').pop() || 'index.html';
       }
-    }catch(e){ /* fallback al texto que ya tiene */ }
-
-    link.addEventListener('click', function(e){
-      e.preventDefault();
-      history.back();
-    });
-  } else {
-    // Si entraste directo, mantener link a market.html con texto descriptivo
-    link.textContent = '← Ver Subnet Market';
+    } catch(e){}
   }
+
+  // Construir el texto del botón según de dónde viene
+  const labels = {
+    'market.html':           '← Volver al Market',
+    'aprende.html':          '← Volver a Aprende',
+    'index.html':            '← Volver al inicio',
+    '':                      '← Volver al inicio',
+    'que-es-bittensor.html': '← Volver a la guía',
+    'subnet.html':           '← Volver a la subnet',
+  };
+  if(fromPath.startsWith('aprende-modulo-')){
+    link.textContent = '← Volver al módulo';
+  } else if(labels[fromPath] !== undefined){
+    link.textContent = labels[fromPath];
+  } else if(fromPath){
+    link.textContent = '← Volver';
+  }
+  // Si fromPath está vacío, dejamos el texto por defecto del HTML
+
+  // El click siempre intenta history.back() primero
+  link.addEventListener('click', function(e){
+    // Si tenemos historial real Y venimos del mismo sitio, usamos back
+    if(fromPath && window.history.length > 1){
+      e.preventDefault();
+      window.history.back();
+    }
+    // Si no, dejamos que el href haga su trabajo (market.html como fallback)
+  });
 })();
+
+// Antes de salir de esta página, guardar dónde estamos para que la próxima sepa
+window.addEventListener('beforeunload', function(){
+  try {
+    const here = window.location.pathname.split('/').pop() || 'index.html';
+    sessionStorage.setItem('lastPage', here);
+  } catch(e){}
+});
+
+// También al cambiar de visibilidad (iOS dispara esto antes de unload)
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'hidden'){
+    try {
+      const here = window.location.pathname.split('/').pop() || 'index.html';
+      sessionStorage.setItem('lastPage', here);
+    } catch(e){}
+  }
+});
 </script>
 
 </body>
