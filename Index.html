@@ -62,6 +62,17 @@ linear-gradient(180deg, #02030a 0%, #07091a 50%, #02030a 100%);
 z-index: 0;
 }
 
+/* Red neuronal + bloques de blockchain — fondo animado discreto */
+#bg-network {
+position: fixed;
+inset: 0;
+width: 100%;
+height: 100%;
+z-index: 2;
+pointer-events: none;
+opacity: 0.55;
+}
+
 /* Sol synthwave */
 .sun {
 position: fixed;
@@ -560,6 +571,7 @@ gap: 8px;
   </a>
 
   <div class="bg"></div>
+  <canvas id="bg-network"></canvas>
   <div class="sun"></div>
   <div class="floor"></div>
 
@@ -651,6 +663,171 @@ gap: 8px;
       // Fallar silenciosamente — el botón sigue siendo clicable
       console.error('TAO price load failed', e);
     }
+  })();
+  </script>
+
+  <script>
+  // ===== FONDO ANIMADO: red neuronal + bloques blockchain =====
+  (function(){
+    const canvas = document.getElementById('bg-network');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    // ----- Configuración general -----
+    const isMobile = window.innerWidth < 720;
+    const NODE_COUNT = isMobile ? 28 : 55;
+    const CONNECTION_DIST = isMobile ? 130 : 160;
+    const BLOCK_INTERVAL_MS = isMobile ? 5000 : 3500;
+
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let w = 0, h = 0;
+    let nodes = [];
+    let blocks = [];
+    let lastBlockTime = 0;
+    let running = true;
+
+    // ----- Resize -----
+    function resize(){
+      w = canvas.clientWidth = window.innerWidth;
+      h = canvas.clientHeight = window.innerHeight;
+      canvas.width  = w * dpr;
+      canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // ----- Inicialización de nodos -----
+    function initNodes(){
+      nodes = [];
+      for(let i = 0; i < NODE_COUNT; i++){
+        nodes.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.18,
+          r: 1 + Math.random() * 1.2,
+        });
+      }
+    }
+
+    // ----- Crear bloque de blockchain -----
+    function createBlock(){
+      const size = 14 + Math.random() * 8;
+      const lane = Math.random() < 0.5 ? 'top' : 'bottom';
+      const yBase = lane === 'top' ? 60 + Math.random() * 80 : h - 100 - Math.random() * 80;
+      blocks.push({
+        x: w + size,
+        y: yBase,
+        size,
+        speed: 0.35 + Math.random() * 0.25,
+        opacity: 0,
+        targetOpacity: 0.45 + Math.random() * 0.25,
+        prev: blocks.length > 0 ? blocks[blocks.length - 1] : null,
+      });
+      // Limitar la cadena activa para no saturar
+      if(blocks.length > 8){
+        // Cuando hay muchos, los más antiguos ya estarán fuera de pantalla
+        blocks = blocks.filter(b => b.x > -size * 2);
+      }
+    }
+
+    // ----- Update + Draw -----
+    function step(now){
+      if(!running){ return; }
+      ctx.clearRect(0, 0, w, h);
+
+      // Update nodes
+      for(const n of nodes){
+        n.x += n.vx;
+        n.y += n.vy;
+        if(n.x < 0 || n.x > w) n.vx *= -1;
+        if(n.y < 0 || n.y > h) n.vy *= -1;
+      }
+
+      // Draw connections (lines)
+      ctx.lineWidth = 1;
+      for(let i = 0; i < nodes.length; i++){
+        for(let j = i + 1; j < nodes.length; j++){
+          const a = nodes[i], b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if(dist < CONNECTION_DIST){
+            const opacity = (1 - dist / CONNECTION_DIST) * 0.25;
+            ctx.strokeStyle = `rgba(0, 240, 255, ${opacity})`;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw nodes
+      for(const n of nodes){
+        ctx.fillStyle = 'rgba(0, 240, 255, 0.55)';
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Add new block periodically
+      if(now - lastBlockTime > BLOCK_INTERVAL_MS){
+        createBlock();
+        lastBlockTime = now;
+      }
+
+      // Update + Draw blocks (chain)
+      for(let i = blocks.length - 1; i >= 0; i--){
+        const b = blocks[i];
+        b.x -= b.speed;
+        // Fade in
+        if(b.opacity < b.targetOpacity) b.opacity += 0.012;
+
+        // Línea conectando con el anterior (cadena)
+        if(b.prev && b.prev.x > -b.size && b.opacity > 0.05){
+          const lineOpacity = Math.min(b.opacity, b.prev.opacity || 0) * 0.6;
+          ctx.strokeStyle = `rgba(255, 43, 214, ${lineOpacity})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(b.x + b.size/2, b.y);
+          ctx.lineTo(b.prev.x - b.prev.size/2, b.prev.y);
+          ctx.stroke();
+        }
+
+        // El bloque (silueta vacía)
+        ctx.strokeStyle = `rgba(255, 43, 214, ${b.opacity})`;
+        ctx.lineWidth = 1.2;
+        ctx.strokeRect(b.x - b.size/2, b.y - b.size/2, b.size, b.size);
+
+        // Un punto pequeño en el centro (anclaje visual)
+        ctx.fillStyle = `rgba(255, 43, 214, ${b.opacity * 0.7})`;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Eliminar si está fuera de pantalla
+        if(b.x < -b.size * 2){
+          blocks.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    // ----- Pause cuando la pestaña no está visible -----
+    document.addEventListener('visibilitychange', function(){
+      running = (document.visibilityState === 'visible');
+      if(running) requestAnimationFrame(step);
+    });
+
+    // ----- Iniciar -----
+    window.addEventListener('resize', () => {
+      resize();
+      initNodes();
+    });
+
+    resize();
+    initNodes();
+    requestAnimationFrame(step);
   })();
   </script>
 
