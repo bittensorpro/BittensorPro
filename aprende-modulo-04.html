@@ -356,5 +356,28 @@ box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
 })();
 </script>
 
+<script>
+// Guardar esta página en sessionStorage para el botón "Volver" inteligente
+(function(){
+  function savePage(){
+    try {
+      const here = window.location.pathname.split('/').pop() || 'index.html';
+      sessionStorage.setItem('lastPage', here);
+    } catch(e){}
+  }
+  window.addEventListener('beforeunload', savePage);
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'hidden') savePage();
+  });
+  // También guardar cuando hacen click en cualquier link interno
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href]');
+    if(a && a.getAttribute('href') && !a.getAttribute('href').startsWith('http')){
+      savePage();
+    }
+  }, true);
+})();
+</script>
+
 </body>
 </html>
