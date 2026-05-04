@@ -144,6 +144,18 @@
     line-height: 1.1;
     flex-shrink: 0;
     font-family: 'Share Tech Mono', monospace;
+    text-decoration: none;
+    color: inherit;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s, transform 0.15s;
+    cursor: pointer;
+  }
+  .tao-info:hover {
+    background: rgba(0, 240, 255, 0.06);
+  }
+  .tao-info:active {
+    transform: scale(0.97);
   }
   .tao-label {
     font-size: 9px;
@@ -532,11 +544,11 @@
     </div>
   </a>
   <a href="aprende.html" class="learn-btn" title="Academia Bittensor">Aprender</a>
-  <div class="tao-info">
+  <a href="tao.html" class="tao-info" title="Ver página de TAO">
     <span class="tao-label">TAO</span>
     <span class="tao-price" id="tao-price">—</span>
     <span class="tao-change" id="tao-change">—</span>
-  </div>
+  </a>
 </header>
 
 <div class="stats-bar">
