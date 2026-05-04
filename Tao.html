@@ -627,7 +627,7 @@ function renderPage(){
   // HTML completo
   const html = `
     <div class="breadcrumb">
-      <a href="market.html">← Volver al Market</a>
+      <a href="market.html" id="back-link">← Volver</a>
     </div>
 
     <section class="hero">
@@ -913,6 +913,48 @@ async function init(){
 }
 
 init();
+
+// Botón "Volver" inteligente: usa el historial si vienes del propio sitio, si no va al market
+(function setupSmartBack(){
+  const link = document.getElementById('back-link');
+  if(!link) return;
+
+  // Si llegamos navegando desde el mismo sitio, usamos history.back()
+  // Si entraste directo (sin referrer o desde Google/X), dejamos que vaya a market.html
+  const sameOrigin = document.referrer && document.referrer.startsWith(window.location.origin);
+
+  if(sameOrigin){
+    // Detectar texto a mostrar según referrer
+    try{
+      const refUrl = new URL(document.referrer);
+      const refPath = refUrl.pathname.split('/').pop() || '';
+      const labels = {
+        'market.html':           '← Volver al Market',
+        'aprende.html':          '← Volver a Aprende',
+        'index.html':            '← Volver al inicio',
+        '':                      '← Volver al inicio',
+        'que-es-bittensor.html': '← Volver a la guía',
+        'subnet.html':           '← Volver a la subnet',
+      };
+      // Si es un módulo de academia
+      if(refPath.startsWith('aprende-modulo-')){
+        link.textContent = '← Volver al módulo';
+      } else if(labels[refPath] !== undefined){
+        link.textContent = labels[refPath];
+      } else {
+        link.textContent = '← Volver';
+      }
+    }catch(e){ /* fallback al texto que ya tiene */ }
+
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      history.back();
+    });
+  } else {
+    // Si entraste directo, mantener link a market.html con texto descriptivo
+    link.textContent = '← Ver Subnet Market';
+  }
+})();
 </script>
 
 </body>
