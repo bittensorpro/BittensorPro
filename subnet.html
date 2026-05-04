@@ -262,9 +262,80 @@ footer a{color:var(--cyan);text-decoration:none}
   .chart-wrap{height:260px;padding:14px}
   .stats-grid{grid-template-columns:1fr 1fr}
   .stat-value{font-size:16px}
-  .nav a:not(.active){display:none}
+  .nav a:not(.active):not(.nav-tao){display:none}
+    .nav-tao{padding:3px 7px;font-size:10px;gap:5px}
+    .nav-tao .nt-arrow{font-size:11px}
+    .nav-tao .nt-change{display:none}
   .actions .btn{flex:1;justify-content:center}
 }
+
+
+
+  /* ===== TAO INLINE IN NAV ===== */
+  .nav-tao {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    border-radius: 6px;
+    background: rgba(0, 240, 255, 0.04);
+    text-decoration: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: #e8f0f5;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+  .nav-tao:hover {
+    background: rgba(0, 240, 255, 0.10);
+    border-color: rgba(0, 240, 255, 0.55);
+    color: #fff;
+  }
+  .nav-tao .nt-price {
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+  .nav-tao .nt-change {
+    font-variant-numeric: tabular-nums;
+    font-size: 10px;
+  }
+  .nav-tao .nt-change.pos { color: #22d87a; }
+  .nav-tao .nt-change.neg { color: #ff4d5e; }
+  .nav-tao .nt-change.zero { color: #6b7385; }
+  .nav-tao .nt-arrow {
+    color: #00f0ff;
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+  .nav-tao:hover .nt-arrow {
+    transform: translateX(2px);
+  }
+  .nav-tao .nt-symbol {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    color: #00f0ff;
+    background: rgba(0, 240, 255, 0.08);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    border-radius: 4px;
+    padding: 3px 5px;
+    margin-right: 4px;
+    line-height: 1;
+    text-shadow: 0 0 4px rgba(0, 240, 255, 0.6);
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+  }
+  @media (max-width: 600px) {
+    .nav-tao .nt-change { display: none; }
+    .nav-tao { padding: 3px 8px; font-size: 10px; gap: 5px; }
+    .nav-tao .nt-arrow { font-size: 11px; }
+  }
+
 </style>
 
 </head>
@@ -277,7 +348,7 @@ footer a{color:var(--cyan);text-decoration:none}
   </a>
   <nav class="nav">
     <a href="aprende.html">Aprende</a>
-    <a href="market.html" class="active">Market</a><a href="tao.html">TAO</a><a href="index.html">Inicio</a>
+    <a href="market.html" class="active">Market</a><a href="tao.html" class="nav-tao" title="Ver página de TAO"><span class="nt-symbol">TAO</span><span class="nt-price" id="nav-tao-price">—</span><span class="nt-change zero" id="nav-tao-change">—</span><span class="nt-arrow">→</span></a><a href="index.html">Inicio</a>
   </nav>
 </header>
 
@@ -864,6 +935,44 @@ async function init(){
 }
 
 init();
+</script>
+
+<script>
+(async function loadNavTao(){
+  const API_BASE = 'https://tao360.qrchd889gj.workers.dev';
+  function fmtUSD(n){
+    if(!n && n !== 0) return '—';
+    if(n < 1) return '$' + n.toFixed(3);
+    if(n < 100) return '$' + n.toFixed(2);
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+  function fmtPct(v){
+    if(v === null || v === undefined || isNaN(v)) return '—';
+    return (v > 0 ? '+' : '') + v.toFixed(1) + '%';
+  }
+  function pctClass(v){
+    if(v > 0.001) return 'pos';
+    if(v < -0.001) return 'neg';
+    return 'zero';
+  }
+  try{
+    const r = await fetch(`${API_BASE}/api/price/latest/v1?asset=tao`);
+    const j = await r.json();
+    if(j && j.data && j.data[0]){
+      const price = parseFloat(j.data[0].price) || 0;
+      const change = parseFloat(j.data[0].percent_change_24h) || 0;
+      const p = document.getElementById('nav-tao-price');
+      const c = document.getElementById('nav-tao-change');
+      if(p) p.textContent = fmtUSD(price);
+      if(c){
+        c.textContent = fmtPct(change);
+        c.className = 'nt-change ' + pctClass(change);
+      }
+    }
+  }catch(e){
+    console.error('nav-tao load failed', e);
+  }
+})();
 </script>
 
 </body>
