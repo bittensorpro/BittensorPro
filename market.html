@@ -136,45 +136,69 @@
     margin-top: 2px;
   }
 
-  /* TAO ticker compacto */
+  /* TAO ticker compacto - mismo estilo que .nav-tao en el resto del sitio */
   .tao-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    line-height: 1.1;
-    flex-shrink: 0;
-    font-family: 'Share Tech Mono', monospace;
-    text-decoration: none;
-    color: inherit;
-    padding: 4px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border: 1px solid rgba(0, 240, 255, 0.25);
     border-radius: 6px;
-    transition: background 0.15s, transform 0.15s;
+    background: rgba(0, 240, 255, 0.04);
+    text-decoration: none;
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: all 0.15s;
     cursor: pointer;
   }
   .tao-info:hover {
-    background: rgba(0, 240, 255, 0.06);
+    background: rgba(0, 240, 255, 0.10);
+    border-color: rgba(0, 240, 255, 0.55);
   }
   .tao-info:active {
     transform: scale(0.97);
   }
-  .tao-label {
+  .tao-symbol {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
     font-size: 9px;
-    color: var(--text-faint);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #00f0ff;
+    background: rgba(0, 240, 255, 0.08);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    border-radius: 4px;
+    padding: 3px 5px;
+    line-height: 1;
+    text-shadow: 0 0 4px rgba(0, 240, 255, 0.6);
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
   }
   .tao-price {
-    font-size: 14px;
+    font-variant-numeric: tabular-nums;
     font-weight: 500;
-    color: var(--text);
-    margin-top: 2px;
   }
   .tao-change {
-    font-size: 11px;
-    margin-top: 1px;
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
   }
   .tao-change.pos { color: var(--green); }
   .tao-change.neg { color: var(--red); }
+  .tao-change.zero { color: var(--text-dim); }
+  .tao-arrow {
+    color: #00f0ff;
+    font-size: 12px;
+    text-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
+    transition: transform 0.2s;
+  }
+  .tao-info:hover .tao-arrow {
+    transform: translateX(2px);
+  }
 
   /* Botón Aprender en header */
   .learn-btn {
@@ -525,7 +549,8 @@
     .controls { padding: 10px 12px; }
     .list-row { padding: 12px 12px; gap: 8px; }
     .brand-title { font-size: 14px; }
-    .tao-price { font-size: 13px; }
+    .tao-info { padding: 3px 7px; gap: 5px; font-size: 11px; }
+    .tao-info .tao-change { display: none; }
     .stat-value { font-size: 12px; }
     .toggle button { padding: 6px 10px; font-size: 12px; min-width: 30px; }
     #tf-toggle button { padding: 6px 7px; font-size: 11px; min-width: 26px; }
@@ -545,9 +570,10 @@
   </a>
   <a href="aprende.html" class="learn-btn" title="Academia Bittensor">Aprender</a>
   <a href="tao.html" class="tao-info" title="Ver página de TAO">
-    <span class="tao-label">TAO</span>
+    <span class="tao-symbol">TAO</span>
     <span class="tao-price" id="tao-price">—</span>
-    <span class="tao-change" id="tao-change">—</span>
+    <span class="tao-change zero" id="tao-change">—</span>
+    <span class="tao-arrow">→</span>
   </a>
 </header>
 
