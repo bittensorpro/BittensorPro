@@ -611,7 +611,7 @@ function parseSubnet(raw){
 function renderError(msg){
   const html = `
     <div class="breadcrumb">
-      <a href="market.html">← Volver al Market</a>
+      <a href="market.html" id="back-link">← Volver al Market</a>
     </div>
     <div class="error-state">
       <h2>Subnet no encontrada</h2>
@@ -620,6 +620,7 @@ function renderError(msg){
     </div>
   `;
   document.getElementById('content').innerHTML = html;
+  setupSmartBack();
 }
 
 function renderPage(){
@@ -659,7 +660,7 @@ function renderPage(){
   // Construir HTML
   const html = `
     <div class="breadcrumb">
-      <a href="market.html">← Volver al Market</a>
+      <a href="market.html" id="back-link">← Volver al Market</a>
     </div>
 
     <section class="hero">
@@ -729,6 +730,9 @@ function renderPage(){
   `;
 
   document.getElementById('content').innerHTML = html;
+
+  // Activar el "← Volver" inteligente
+  setupSmartBack();
 
   // Listener del toggle 1d/7d
   document.getElementById('tf-toggle').addEventListener('click', e => {
@@ -935,6 +939,62 @@ async function init(){
 }
 
 init();
+
+// Botón "Volver" inteligente: usa history.back() si vienes del propio sitio
+function setupSmartBack(){
+  const link = document.getElementById('back-link');
+  if(!link) return;
+
+  let fromPath = '';
+  try { fromPath = sessionStorage.getItem('lastPage') || ''; } catch(e){}
+  if(!fromPath && document.referrer){
+    try {
+      const refUrl = new URL(document.referrer);
+      if(refUrl.origin === window.location.origin){
+        fromPath = refUrl.pathname.split('/').pop() || 'index.html';
+      }
+    } catch(e){}
+  }
+
+  const labels = {
+    'market.html':           '← Volver al Market',
+    'aprende.html':          '← Volver a Aprende',
+    'index.html':            '← Volver al inicio',
+    '':                      '← Volver al inicio',
+    'que-es-bittensor.html': '← Volver a la guía',
+    'tao.html':              '← Volver a TAO',
+  };
+  if(fromPath.startsWith('aprende-modulo-')){
+    link.textContent = '← Volver al módulo';
+  } else if(labels[fromPath] !== undefined){
+    link.textContent = labels[fromPath];
+  } else if(fromPath){
+    link.textContent = '← Volver';
+  }
+
+  link.addEventListener('click', function(e){
+    if(fromPath && window.history.length > 1){
+      e.preventDefault();
+      window.history.back();
+    }
+  });
+}
+
+// Guardar dónde estamos para que la próxima página sepa de dónde venimos
+window.addEventListener('beforeunload', function(){
+  try {
+    const here = window.location.pathname.split('/').pop() || 'index.html';
+    sessionStorage.setItem('lastPage', here);
+  } catch(e){}
+});
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'hidden'){
+    try {
+      const here = window.location.pathname.split('/').pop() || 'index.html';
+      sessionStorage.setItem('lastPage', here);
+    } catch(e){}
+  }
+});
 </script>
 
 <script>
