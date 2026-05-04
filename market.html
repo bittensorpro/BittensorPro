@@ -200,28 +200,31 @@
     transform: translateX(2px);
   }
 
-  /* Botón Aprender en header */
+  /* Botón Aprender en header — discreto, coherente con .tao-info */
   .learn-btn {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
+    font-size: 10px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--cyan);
     text-decoration: none;
-    padding: 6px 12px;
-    border: 1px solid rgba(0, 240, 255, 0.3);
+    padding: 4px 10px;
+    border: 1px solid rgba(0, 240, 255, 0.25);
     border-radius: 6px;
+    background: rgba(0, 240, 255, 0.04);
     transition: all 0.15s;
     flex-shrink: 0;
-    text-shadow: 0 0 6px rgba(0, 240, 255, 0.4);
+    line-height: 1.4;
   }
   .learn-btn:hover {
-    border-color: var(--cyan);
-    background: rgba(0, 240, 255, 0.06);
-    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    border-color: rgba(0, 240, 255, 0.55);
+    background: rgba(0, 240, 255, 0.10);
   }
-  @media (max-width: 480px) {
-    .learn-btn { font-size: 10px; padding: 5px 8px; letter-spacing: 0.12em; }
+  @media (max-width: 600px) {
+    .learn-btn { font-size: 9px; padding: 4px 8px; letter-spacing: 0.10em; }
+  }
+  @media (max-width: 380px) {
+    .learn-btn { display: none; }
   }
 
   /* ===== STATS BAR ===== */
