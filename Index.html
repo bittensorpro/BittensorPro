@@ -458,10 +458,106 @@ gap: 10px;
 }
 .preview-btn .live-indicator { font-size: 9px; padding: 2px 6px; }
 }
+
+/* ===== TAO PRICE FLOATING BUTTON (top-right) ===== */
+.tao-float {
+position: fixed;
+top: 18px;
+right: 18px;
+z-index: 100;
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 8px 14px;
+background: rgba(13, 15, 23, 0.7);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border: 1px solid rgba(0, 240, 255, 0.25);
+border-radius: 10px;
+text-decoration: none;
+color: inherit;
+font-family: ‘Share Tech Mono’, monospace;
+transition: all 0.2s ease;
+box-shadow: 0 4px 20px rgba(0, 240, 255, 0.08);
+}
+.tao-float:hover {
+background: rgba(0, 240, 255, 0.08);
+border-color: rgba(0, 240, 255, 0.6);
+box-shadow: 0 4px 24px rgba(0, 240, 255, 0.25);
+transform: translateY(-1px);
+}
+.tao-float:active {
+transform: translateY(0);
+}
+.tao-float-info {
+display: flex;
+flex-direction: column;
+align-items: flex-end;
+line-height: 1.15;
+}
+.tao-float-label {
+font-size: 9px;
+color: #6b7385;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+}
+.tao-float-row {
+display: flex;
+align-items: baseline;
+gap: 8px;
+margin-top: 2px;
+}
+.tao-float-price {
+font-size: 14px;
+font-weight: 500;
+color: #e8f0f5;
+font-variant-numeric: tabular-nums;
+}
+.tao-float-change {
+font-size: 11px;
+font-variant-numeric: tabular-nums;
+}
+.tao-float-change.pos { color: #22d87a; }
+.tao-float-change.neg { color: #ff4d5e; }
+.tao-float-change.zero { color: #6b7385; }
+.tao-float-arrow {
+font-size: 14px;
+color: #00f0ff;
+text-shadow: 0 0 6px rgba(0, 240, 255, 0.5);
+transition: transform 0.2s ease;
+}
+.tao-float:hover .tao-float-arrow {
+transform: translateX(2px);
+}
+
+@media (max-width: 480px) {
+.tao-float {
+top: 14px;
+right: 14px;
+padding: 7px 11px;
+gap: 8px;
+}
+.tao-float-price { font-size: 13px; }
+.tao-float-change { font-size: 10px; }
+.tao-float-arrow { font-size: 13px; }
+}
 </style>
 
 </head>
 <body>
+
+  <!-- TAO Price Floating Button -->
+
+  <a href="tao.html" class="tao-float" title="Ver página de TAO">
+    <div class="tao-float-info">
+      <span class="tao-float-label">TAO</span>
+      <div class="tao-float-row">
+        <span class="tao-float-price" id="tao-float-price">—</span>
+        <span class="tao-float-change zero" id="tao-float-change">—</span>
+      </div>
+    </div>
+    <span class="tao-float-arrow">→</span>
+  </a>
 
   <div class="bg"></div>
   <div class="sun"></div>
@@ -519,6 +615,44 @@ gap: 10px;
     <span>v0.0.1 · build 2026.04</span>
     <span>// decentralized intelligence</span>
   </div>
+
+  <script>
+  // Cargar precio TAO en vivo desde el Worker
+  (async function loadTaoPrice(){
+    const API_BASE = 'https://tao360.qrchd889gj.workers.dev';
+    function fmtUSD(n){
+      if(!n && n !== 0) return '—';
+      if(n < 1) return '$' + n.toFixed(4);
+      if(n < 100) return '$' + n.toFixed(2);
+      return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    }
+    function fmtPct(v){
+      if(v === null || v === undefined || isNaN(v)) return '—';
+      const sign = v > 0 ? '+' : '';
+      return sign + v.toFixed(2) + '%';
+    }
+    function pctClass(v){
+      if(v > 0.001) return 'pos';
+      if(v < -0.001) return 'neg';
+      return 'zero';
+    }
+    try{
+      const r = await fetch(`${API_BASE}/api/price/latest/v1?asset=tao`);
+      const j = await r.json();
+      if(j && j.data && j.data[0]){
+        const price = parseFloat(j.data[0].price) || 0;
+        const change = parseFloat(j.data[0].percent_change_24h) || 0;
+        document.getElementById('tao-float-price').textContent = fmtUSD(price);
+        const changeEl = document.getElementById('tao-float-change');
+        changeEl.textContent = fmtPct(change);
+        changeEl.className = 'tao-float-change ' + pctClass(change);
+      }
+    }catch(e){
+      // Fallar silenciosamente — el botón sigue siendo clicable
+      console.error('TAO price load failed', e);
+    }
+  })();
+  </script>
 
 </body>
 </html>
